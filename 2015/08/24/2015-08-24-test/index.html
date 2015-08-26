@@ -5,12 +5,20 @@
   <meta charset="UTF-8">
   <meta name="baidu-site-verification" content="GliC1jSe3E" />
   
-    <title>Hello World | Hexo</title>
+    <title>Octopress搭建静态博客网站 | Hexo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="John Doe">
     
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in ">
+    <meta name="description" content="使用Octopress搭建静态网站的好处：    
+命令行操作
+纯文本写博客
+定制性高
+纯静态
+版本化管理
+迁移成本低
+简洁的Ruby框架
+Markdown语法    尤其适合程序员">
     
     
     
@@ -70,14 +78,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/08/26/hello-world/" title="Hello World" itemprop="url">Hello World</a>
+      <a href="/2015/08/24/2015-08-24-test/" title="Octopress搭建静态博客网站" itemprop="url">Octopress搭建静态博客网站</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/118224772589648180000?rel=author" title="John Doe" target="_blank" itemprop="author">John Doe</a>
 		
   <p class="article-time">
-    <time datetime="2015-08-26T10:25:10.452Z" itemprop="datePublished"> 發表於 2015-08-26</time>
+    <time datetime="2015-08-24T12:12:21.000Z" itemprop="datePublished"> 發表於 2015-08-24</time>
     
   </p>
 </header>
@@ -87,31 +95,135 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick_Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create_a_new_post"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run_server"><span class="toc-number">1.2.</span> <span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate_static_files"><span class="toc-number">1.3.</span> <span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy_to_remote_sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+			
 		
 		</div>
 		
-		<p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick_Start">Quick Start</h2><h3 id="Create_a_new_post">Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run_server">Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate_static_files">Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+		<ul>
+<li>使用Octopress搭建静态网站的好处：    <ul>
+<li>命令行操作</li>
+<li>纯文本写博客</li>
+<li>定制性高</li>
+<li>纯静态</li>
+<li>版本化管理</li>
+<li>迁移成本低</li>
+<li>简洁的Ruby框架</li>
+<li>Markdown语法    尤其适合程序员<a id="more"></a></li>
+</ul>
+</li>
+<li>基本过程<ul>
+<li>搭建环境</li>
+<li>纯文本写博客</li>
+<li>生成静态网页</li>
+<li>本地预览</li>
+<li>部署</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>环境准备</p>
+</blockquote>
+<ul>
+<li>Git、Ruby、DevKit、MarkdownPad的安装与配置（简单，直接下一步，资源见连接课程资料）</li>
+<li>安装Octopress并设置默认主题</li>
+<li><a href="http://www.jikexueyuan.com/course/887.html" target="_blank" rel="external">资料与视频教程</a></li>
+</ul>
+<blockquote>
+<p>各工具的作用</p>
+</blockquote>
+<ul>
+<li>Git版本管理工具，将代码托管到GitHub上</li>
+<li>Ruby+DevKit：生成静态网页</li>
+<li>MarkdownPad:Windows下Markdown语法编辑器</li>
+</ul>
+<blockquote>
+<p>安装Octopress</p>
+</blockquote>
+<ul>
+<li>从GitHub官网克隆Octopress至本地<br><br>git clone git://github.com/imathis/octopress.git octopress</li>
+<li>安装依赖项<br><br>gem install bundler<br><br>bundle install</li>
+<li><p>安装并使用默认主题<br><br>rake install</p>
+<blockquote>
+<p>生成博客与单页</p>
+</blockquote>
+</li>
+<li><p>新建博客<br><br>rake new_post[“title”]</p>
+</li>
+<li><p>新建单页面<br><br>rake new_page[danyemian]<br><br>rake new_page[danyemian/page.html]</p>
+<blockquote>
+<p>用Markdown语法书写博客</p>
+</blockquote>
+<p>可以使用MarkdownPad、记事本、Vim、Emacs……等工具</p>
+<blockquote>
+<p>生成静态页面、本地预览</p>
+</blockquote>
+<p>rake generate<br>rake preview<br><a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a></p>
+<blockquote>
+<p>部署网站至GitHub</p>
+</blockquote>
+</li>
+<li><p>新建仓库<br><br>username.github.io</p>
+</li>
+<li><p>与本地Octopress目录绑定<br><br>rake setup_github_pages<br><br>rake deploy</p>
+<blockquote>
+<p>托管源码至GitHub</p>
+</blockquote>
+<p>git add .<br>git commit -m ‘your message’<br>git push origin source</p>
+<blockquote>
+<p>博客的自定义配置-完善主配置文件</p>
+</blockquote>
+<p>在_config.yml文件中，设置url、title、author等基本信息</p>
+<blockquote>
+<p>博客的自定义配置——使用第三方插件</p>
+</blockquote>
+</li>
+<li><p>安装使用主题</p>
+<ul>
+<li>到GitHub上找到主题文件、按照提示克隆到本地</li>
+<li>安装主题（记得备份，否则原来的配置会被覆盖，所以最好在其他设置之前完成）<br><br>rake install[‘themename’]</li>
+<li>重新生成<br>rake generate</li>
+</ul>
+</li>
+<li>增加评论功能(多说网)</li>
+<li>增加社会化分享（JiaThis）</li>
+<li>自定义404页面 (<a href="http://www.qq.com/404" target="_blank" rel="external">http://www.qq.com/404</a>) </li>
+<li>自定义导航（自定义octopress\source_includes\custom\navigation.html）</li>
+</ul>
+<blockquote>
+<p>自定义网站域名</p>
+</blockquote>
+<ul>
+<li>在GitHub上绑定自定义域名<br><br>echo ‘wzb.link’ &gt; source/CNAME<br>    </li>
+<li>解析域名至GitHub<br><ul>
+<li>子域名（www.wzb.com）,创建CNAME记录指向charlie.github.io</li>
+<li>顶级域名（wzb.com）,使用A记录指向192.30.252.153（154）</li>
+</ul>
+</li>
+</ul>
+<p>至此Octopress静态博客创建就完成了，更多博文请关注我的CSDN博客</p>
+<p><a href="http://blog.csdn.net/u011562098" target="_blank" rel="external">csdn博客链接(Better Man的博客专栏)</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Octopress/">Octopress</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/GitHub/">GitHub</a><a href="/tags/Octopress/">Octopress</a><a href="/tags/静态博客/">静态博客</a>
+  </div>
 
 </div>
 
 
 <div class="article-share" id="share">
 
-  <div data-url="http://wangzhibin986.github.io/2015/08/26/hello-world/" data-title="Hello World | Hexo" data-tsina="null" class="share clearfix">
+  <div data-url="http://wangzhibin986.github.io/2015/08/24/2015-08-24-test/" data-title="Octopress搭建静态博客网站 | Hexo" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -121,18 +233,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/08/26/我的第一篇博客/" title="我的第一篇博客">
+ <a href="/2015/08/26/2015-08-26-maven/" title="Maven简介">
   <strong>上一篇：</strong><br/>
   <span>
-  我的第一篇博客</span>
+  Maven简介</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2015/08/26/2015-08-26-maven/"  title="Maven简介">
+<a href="/2015/08/23/2015-08-24-Example/"  title="MarkDown基本语法">
  <strong>下一篇：</strong><br/> 
- <span>Maven简介
+ <span>MarkDown基本语法
 </span>
 </a>
 </div>
@@ -157,7 +269,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick_Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create_a_new_post"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run_server"><span class="toc-number">1.2.</span> <span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate_static_files"><span class="toc-number">1.3.</span> <span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy_to_remote_sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+ 
  
   </div>
 
