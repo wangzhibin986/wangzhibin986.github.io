@@ -10,11 +10,7 @@
     
     <meta name="author" content="Wang Zhibin">
     
-    <meta name="description" content="Maven是什么？
-
-Maven是Apache软件基金会下的一个开源项目。Maven是基于项目对象模型(POM)，可以通过一小段描述信息来管理项目的构建，
-报告和文档的软件项目管理工具。Maven 除了以程序构建能力为特色之外，还提供高级项目管理工具。由于 Maven 的缺省构建
-规则有较高的可重用">
+    <meta name="description" content="Maven是什么？Maven是Apache软件基金会下的一个开源项目。Maven是基于项目对象模型(POM)，可以通过一小段描述信息来管理项目的构建，报告和文档的软件项目管理工具。Maven 除了以程序构建能力为特色之外，还提供高级项目管理工具。由于 Maven 的缺省构建规则有较高的可重用性，所以">
     
     
     
@@ -74,7 +70,7 @@ Maven是Apache软件基金会下的一个开源项目。Maven是基于项目对�
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/08/26/2015-08-26-maven/" title="Maven简介" itemprop="url">Maven简介</a>
+      <a href="/2015/08/26/maven/" title="Maven简介" itemprop="url">Maven简介</a>
   </h1>
   <p class="article-author">By
        
@@ -91,42 +87,32 @@ Maven是Apache软件基金会下的一个开源项目。Maven是基于项目对�
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Maven是什么？"><span class="toc-number">1.</span> <span class="toc-text">Maven是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Maven的特性"><span class="toc-number">2.</span> <span class="toc-text">Maven的特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Maven是如何运行和管理项目的"><span class="toc-number">3.</span> <span class="toc-text">Maven是如何运行和管理项目的</span></a></li></ol>
 		
 		</div>
 		
-		<blockquote>
-<p>Maven是什么？</p>
-</blockquote>
-<pre><code>Maven是Apache软件基金会下的一个开源项目。Maven是基于项目对象模型<span class="params">(POM)</span>，可以通过一小段描述信息来管理项目的构建，
-报告和文档的软件项目管理工具。Maven 除了以程序构建能力为特色之外，还提供高级项目管理工具。由于 Maven 的缺省构建
-规则有较高的可重用性，所以常常用两三行 Maven 构建脚本就可以构建简单的项目。由于 Maven 的面向项目的方法，许多
-Apache Jakarta 项目发文时使用 Maven，而且公司项目采用 Maven 的比例在持续增长。（摘自百度百科）
-</code></pre><blockquote>
-<p>Maven的特性</p>
-</blockquote>
-<pre><code>约定优于配置
-</code></pre><blockquote>
-<p>Maven是如何运行和管理项目的</p>
-</blockquote>
-<pre><code>Maven是通过<span class="function"><span class="title">POM</span><span class="params">(Project Object Model)</span></span>来实现项目的管理，完成系列任务。项目的属性、依赖、构建配置等信息都被抽象到项目对象模型中。
-</code></pre><ul>
-<li><p>POM组成</p>
+		<h2 id="Maven是什么？">Maven是什么？</h2><p>Maven是Apache软件基金会下的一个开源项目。Maven是基于项目对象模型(POM)，可以通过一小段描述信息来管理项目的构建，<br>报告和文档的软件项目管理工具。Maven 除了以程序构建能力为特色之外，还提供高级项目管理工具。由于 Maven 的缺省构建<br>规则有较高的可重用性，所以常常用两三行 Maven 构建脚本就可以构建简单的项目。由于 Maven 的面向项目的方法，许多<br>Apache Jakarta 项目发文时使用 Maven，而且公司项目采用 Maven 的比例在持续增长。（摘自百度百科）</p>
+<h2 id="Maven的特性">Maven的特性</h2><p>约定优于配置</p>
+<h2 id="Maven是如何运行和管理项目的">Maven是如何运行和管理项目的</h2><p>Maven是通过POM(Project Object Model)来实现项目的管理，完成系列任务。项目的属性、依赖、构建配置等信息都被抽象到项目对象模型中。</p>
 <ul>
-<li><font color="red"><strong>项目基本信息</strong></font><br><br>项目名称、官方网站、项目的开发者，贡献者列表、许可证列表等</li>
-<li><font color="red"><strong>构建环境</strong></font><br><br>包含能在不同环境中激活的profile(开发环境，生产环境)，对不同的环境设置分开管理。</li>
-<li><font color="red"><strong>POM关系</strong></font><br><br>可以引入当前项目依赖的其他项目、定义父级项目和子项目、设置当前项目坐标等</li>
-<li><font color="red"><strong>构建设置</strong></font><br><br>修改Maven的默认行为（修改源码和测试代码的位置），添加插件或把插件反应到项目的生命周期上、以及自定义生成参数等。</li>
+<li>POM组成<ul>
+<li><font color="red"><strong>项目基本信息</strong></font><br>项目名称、官方网站、项目的开发者，贡献者列表、许可证列表等</li>
+<li><font color="red"><strong>构建环境</strong></font><br>包含能在不同环境中激活的profile(开发环境，生产环境)，对不同的环境设置分开管理。</li>
+<li><font color="red"><strong>POM关系</strong></font><br>可以引入当前项目依赖的其他项目、定义父级项目和子项目、设置当前项目坐标等</li>
+<li><font color="red"><strong>构建设置</strong></font><br>修改Maven的默认行为（修改源码和测试代码的位置），添加插件或把插件反应到项目的生命周期上、以及自定义生成参数等。</li>
 </ul>
-<p><strong>所有的POM配置信息都反应在pom.xml里面，以节点（对象的方式）定义对项目各部分的管理</strong></p>
 </li>
 </ul>
+<p><strong>所有的POM配置信息都反应在pom.xml里面，以节点（对象的方式）定义对项目各部分的管理</strong></p>
 <blockquote>
 <p>Meven中的插件与目标</p>
 </blockquote>
-<pre><code>Maven是一个插件的框架，不执行任何构建任务，所有任务都交给插件来完成。
-</code></pre><ul>
-<li>Maven执行插件的语法   <p>pluginId:goalId</p>    </li>
+<p>Maven是一个插件的框架，不执行任何构建任务，所有任务都交给插件来完成。</p>
+<ul>
+<li>Maven执行插件的语法<ul>
+<li>pluginId:goalId</li>
+</ul>
+</li>
 <li>Maven中调用插件目标的两种方式<ul>
 <li>将插件与生命周期绑定，执行生命周期</li>
 <li>直接执行插件目标</li>
@@ -157,9 +143,8 @@ Apache Jakarta 项目发文时使用 Maven，而且公司项目采用 Maven 的�
 <blockquote>
 <p>项目的生命周期阶段</p>
 </blockquote>
-<pre><code>Maven的项目周期指项目的构建过程，它包含了一序列的有序阶段，而一个阶段就是构建过程中的一个步骤。
-一个生命周期可以绑定多个插件目标。指令 mvn <span class="package"><span class="keyword">package</span></span>
-</code></pre><blockquote>
+<p>Maven的项目周期指项目的构建过程，它包含了一序列的有序阶段，而一个阶段就是构建过程中的一个步骤。<br>一个生命周期可以绑定多个插件目标。指令 mvn package</p>
+<blockquote>
 <p>Maven依赖管理</p>
 </blockquote>
 <ul>
@@ -178,11 +163,12 @@ Apache Jakarta 项目发文时使用 Maven，而且公司项目采用 Maven 的�
 <blockquote>
 <p>Maven仓库</p>
 </blockquote>
-<pre><code>Maven仓库是一个存放了所有依赖的仓库，这个仓库通过依赖坐标对其进行管理。
-
-<span class="number">1.</span> 本地仓库（默认仓库）
-<span class="number">2.</span> 远程仓库（Maven中央仓库，pom.xml中可配置）
-</code></pre><blockquote>
+<p>Maven仓库是一个存放了所有依赖的仓库，这个仓库通过依赖坐标对其进行管理。</p>
+<ol>
+<li>本地仓库（默认仓库）</li>
+<li>远程仓库（Maven中央仓库，pom.xml中可配置）</li>
+</ol>
+<blockquote>
 <p>项目站点报告</p>
 </blockquote>
 <ul>
@@ -210,7 +196,7 @@ Apache Jakarta 项目发文时使用 Maven，而且公司项目采用 Maven 的�
 
 <div class="article-share" id="share">
 
-  <div data-url="http://wangzhibin986.github.io/2015/08/26/2015-08-26-maven/" data-title="Maven简介 | Wzb&#39;s Blog" data-tsina="null" class="share clearfix">
+  <div data-url="http://wangzhibin986.github.io/2015/08/26/maven/" data-title="Maven简介 | Wzb&#39;s Blog" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -229,7 +215,7 @@ Apache Jakarta 项目发文时使用 Maven，而且公司项目采用 Maven 的�
 
 
 <div class="next">
-<a href="/2015/08/24/2015-08-24-test/"  title="Octopress搭建静态博客网站">
+<a href="/2015/08/24/Octopress搭建静态博客网站/"  title="Octopress搭建静态博客网站">
  <strong>下一篇：</strong><br/> 
  <span>Octopress搭建静态博客网站
 </span>
@@ -256,7 +242,7 @@ Apache Jakarta 项目发文时使用 Maven，而且公司项目采用 Maven 的�
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Maven是什么？"><span class="toc-number">1.</span> <span class="toc-text">Maven是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Maven的特性"><span class="toc-number">2.</span> <span class="toc-text">Maven的特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Maven是如何运行和管理项目的"><span class="toc-number">3.</span> <span class="toc-text">Maven是如何运行和管理项目的</span></a></li></ol>
  
   </div>
 
@@ -286,8 +272,6 @@ Apache Jakarta 项目发文时使用 Maven，而且公司项目采用 Maven 的�
 		
 			<li><a href="/tags/MyBatis/" title="MyBatis">MyBatis<sup>2</sup></a></li>
 		
-			<li><a href="/tags/J2EE/" title="J2EE">J2EE<sup>1</sup></a></li>
-		
 			<li><a href="/tags/Maven/" title="Maven">Maven<sup>1</sup></a></li>
 		
 			<li><a href="/tags/Octopress/" title="Octopress">Octopress<sup>1</sup></a></li>
@@ -295,6 +279,8 @@ Apache Jakarta 项目发文时使用 Maven，而且公司项目采用 Maven 的�
 			<li><a href="/tags/GitHub/" title="GitHub">GitHub<sup>1</sup></a></li>
 		
 			<li><a href="/tags/静态博客/" title="静态博客">静态博客<sup>1</sup></a></li>
+		
+			<li><a href="/tags/J2EE/" title="J2EE">J2EE<sup>1</sup></a></li>
 		
 		</ul>
 </div>

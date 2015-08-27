@@ -96,7 +96,7 @@ Markdown语法    尤其适合程序员
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/08/24/2015-08-24-test/" title="Octopress搭建静态博客网站" itemprop="url">Octopress搭建静态博客网站</a>
+      <a href="/2015/08/24/Octopress搭建静态博客网站/" title="Octopress搭建静态博客网站" itemprop="url">Octopress搭建静态博客网站</a>
   </h1>
   <p class="article-author">By
        
@@ -163,64 +163,49 @@ Markdown语法    尤其适合程序员
 <p>安装Octopress</p>
 </blockquote>
 <ul>
-<li>从GitHub官网克隆Octopress至本地<br><br>git clone git://github.com/imathis/octopress.git octopress</li>
-<li>安装依赖项<br><br>gem install bundler<br><br>bundle install</li>
-<li>安装并使用默认主题<br><br>rake install</li>
+<li><p>从GitHub官网克隆Octopress至本地</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone <span class="string">git:</span><span class="comment">//github.com/imathis/octopress.git octopress</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装依赖项</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="label">gem</span> install <span class="keyword">bundler</span><br><span class="line"></span><span class="keyword">bundle </span>install</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装并使用默认主题</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rake <span class="keyword">install</span></span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 <blockquote>
 <p>生成博客与单页</p>
 </blockquote>
 <ul>
-<li>新建博客<br><br>rake new_post[“title”]</li>
-<li>新建单页面<br><br>rake new_page[danyemian]<br><br>rake new_page[danyemian/page.html]</li>
+<li><p>新建博客</p>
+<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rake <span class="keyword">new</span><span class="number">_p</span>ost[<span class="string">"title"</span>]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>新建单页面</p>
+<figure class="highlight ceylon"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rake <span class="keyword">new</span><span class="number">_p</span>age[danyemian]</span><br><span class="line">rake <span class="keyword">new</span><span class="number">_p</span>age[danyemian/page.html]</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 <blockquote>
 <p>用Markdown语法书写博客</p>
 </blockquote>
-<pre><code>可以使用MarkdownPad、记事本、Vim、Emacs……等工具
-</code></pre><blockquote>
+<p>可以使用MarkdownPad、记事本、Vim、Emacs……等工具</p>
+<blockquote>
 <p>生成静态页面、本地预览</p>
 </blockquote>
-<pre><code>rake generate
-rake preview
-<span class="string">http:</span><span class="comment">//localhost:4000</span>
-</code></pre><blockquote>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rake generate</span><br><span class="line">rake preview</span><br><span class="line"><span class="string">http:</span><span class="comment">//localhost:4000</span></span><br></pre></td></tr></table></figure>
+<blockquote>
 <p>部署网站至GitHub</p>
 </blockquote>
 <ul>
-<li>新建仓库<br><br>username.github.io</li>
-<li>与本地Octopress目录绑定<br><br>rake setup_github_pages<br><br>rake deploy</li>
-</ul>
-<blockquote>
-<p>托管源码至GitHub</p>
-</blockquote>
-<pre><code>git add .
-git <span class="operator"><span class="keyword">commit</span> -<span class="keyword">m</span> <span class="string">'your message'</span>
-git push origin <span class="keyword">source</span></span>
-</code></pre><blockquote>
-<p>博客的自定义配置-完善主配置文件</p>
-</blockquote>
-<pre><code>在_<span class="tag">config</span><span class="class">.yml</span>文件中，设置<span class="tag">url</span>、<span class="tag">title</span>、<span class="tag">author</span>等基本信息
-</code></pre><blockquote>
-<p>博客的自定义配置——使用第三方插件</p>
-</blockquote>
-<ul>
-<li>安装使用主题<ul>
-<li>到GitHub上找到主题文件、按照提示克隆到本地</li>
-<li>安装主题（记得备份，否则原来的配置会被覆盖，所以最好在其他设置之前完成）<br><br>rake install[‘themename’]</li>
-<li>重新生成<br>rake generate</li>
-</ul>
+<li><p>新建仓库<br></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">username<span class="class">.github</span><span class="class">.io</span></span><br></pre></td></tr></table></figure>
 </li>
-<li>增加评论功能(多说网)</li>
-<li>增加社会化分享（JiaThis）</li>
-<li>自定义404页面 (<a href="http://www.qq.com/404" target="_blank" rel="external">http://www.qq.com/404</a>) </li>
-<li>自定义导航（自定义octopress\source_includes\custom\navigation.html）</li>
+<li><p>与本地Octopress目录绑定</p>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rake setup\_github\_pages&lt;br/&gt;</span><br><span class="line">rake deploy</span><br><span class="line"><span class="escape">``</span><span class="escape">`	</span></span><br><span class="line">&gt;托管源码至GitHub</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
-<blockquote>
-<p>自定义网站域名</p>
-</blockquote>
+<p>git add .<br>git commit -m ‘your message’<br>git push origin source<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&gt;博客的自定义配置-完善主配置文件</span><br><span class="line"></span><br><span class="line">* 在_config.yml文件中，设置url、title、author等基本信息</span><br><span class="line"></span><br><span class="line">&gt;博客的自定义配置——使用第三方插件</span><br><span class="line"></span><br><span class="line">-<span class="ruby">	安装使用主题</span><br><span class="line"></span>	-<span class="ruby">	到<span class="constant">GitHub</span>上找到主题文件、按照提示克隆到本地</span><br><span class="line"></span>	-<span class="ruby">	安装主题（记得备份，否则原来的配置会被覆盖，所以最好在其他设置之前完成）&lt;br&gt;</span><br><span class="line"></span>		rake install['themename']</span><br><span class="line">	-<span class="ruby">	重新生成</span><br><span class="line"></span>		rake generate</span><br><span class="line">-<span class="ruby">	增加评论功能(多说网)</span><br><span class="line"></span>-<span class="ruby">	增加社会化分享（<span class="constant">JiaThis</span>）</span><br><span class="line"></span>-<span class="ruby">	自定义<span class="number">404</span>页面 (<span class="symbol">http:</span>/<span class="regexp">/www.qq.com/</span><span class="number">404</span>) </span><br><span class="line"></span>-<span class="ruby">	自定义导航（自定义octopress\source\_includes\custom\navigation.html）</span><br><span class="line"></span></span><br><span class="line">&gt;自定义网站域名</span><br><span class="line"></span><br><span class="line">-<span class="ruby">	在<span class="constant">GitHub</span>上绑定自定义域名</span></span><br></pre></td></tr></table></figure></p>
+<p>echo ‘wzb.link’ &gt; source/CNAME<br>```</p>
 <ul>
-<li>在GitHub上绑定自定义域名<br><br>echo ‘wzb.link’ &gt; source/CNAME<br>    </li>
 <li>解析域名至GitHub<br><ul>
 <li>子域名（www.wzb.com）,创建CNAME记录指向charlie.github.io</li>
 <li>顶级域名（wzb.com）,使用A记录指向192.30.252.153（154）</li>
@@ -250,7 +235,7 @@ git push origin <span class="keyword">source</span></span>
 
 <div class="article-share" id="share">
 
-  <div data-url="http://wangzhibin986.github.io/2015/08/24/2015-08-24-test/" data-title="Octopress搭建静态博客网站 | Wzb&#39;s Blog" data-tsina="null" class="share clearfix">
+  <div data-url="http://wangzhibin986.github.io/2015/08/24/Octopress搭建静态博客网站/" data-title="Octopress搭建静态博客网站 | Wzb&#39;s Blog" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -260,7 +245,7 @@ git push origin <span class="keyword">source</span></span>
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/08/26/2015-08-26-maven/" title="Maven简介">
+ <a href="/2015/08/26/maven/" title="Maven简介">
   <strong>上一篇：</strong><br/>
   <span>
   Maven简介</span>
@@ -269,7 +254,7 @@ git push origin <span class="keyword">source</span></span>
 
 
 <div class="next">
-<a href="/2015/08/23/2015-08-24-Example/"  title="MarkDown基本语法">
+<a href="/2015/08/23/Example/"  title="MarkDown基本语法">
  <strong>下一篇：</strong><br/> 
  <span>MarkDown基本语法
 </span>
@@ -326,8 +311,6 @@ git push origin <span class="keyword">source</span></span>
 		
 			<li><a href="/tags/MyBatis/" title="MyBatis">MyBatis<sup>2</sup></a></li>
 		
-			<li><a href="/tags/J2EE/" title="J2EE">J2EE<sup>1</sup></a></li>
-		
 			<li><a href="/tags/Maven/" title="Maven">Maven<sup>1</sup></a></li>
 		
 			<li><a href="/tags/Octopress/" title="Octopress">Octopress<sup>1</sup></a></li>
@@ -335,6 +318,8 @@ git push origin <span class="keyword">source</span></span>
 			<li><a href="/tags/GitHub/" title="GitHub">GitHub<sup>1</sup></a></li>
 		
 			<li><a href="/tags/静态博客/" title="静态博客">静态博客<sup>1</sup></a></li>
+		
+			<li><a href="/tags/J2EE/" title="J2EE">J2EE<sup>1</sup></a></li>
 		
 		</ul>
 </div>
