@@ -5,12 +5,16 @@
   <meta charset="UTF-8">
   <meta name="baidu-site-verification" content="GliC1jSe3E" />
   
-    <title>我的第一篇博客 | Wzb&#39;s Blog</title>
+    <title>MyBatis入门 | Wzb&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Wang Zhibin">
     
-    <meta name="description" content="#测试一下hexo搭建博客是否成功">
+    <meta name="description" content="##MyBatis简介
+
+MyBatis 本是apache的一个开源项目iBatis, 2010年这个项目由apache software foundation 迁移到了google code，并且改名为MyBatis 。2013年11月迁移到Github。
+
+iBATIS一词来源于“interne">
     
     
     
@@ -70,14 +74,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/08/26/我的第一篇博客/" title="我的第一篇博客" itemprop="url">我的第一篇博客</a>
+      <a href="/2015/08/27/MyBatis入门/" title="MyBatis入门" itemprop="url">MyBatis入门</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/118224772589648180000?rel=author" title="Wang Zhibin" target="_blank" itemprop="author">Wang Zhibin</a>
 		
   <p class="article-time">
-    <time datetime="2015-08-26T10:30:56.000Z" itemprop="datePublished"> 发表于 2015-08-26</time>
+    <time datetime="2015-08-27T11:35:45.000Z" itemprop="datePublished"> 发表于 2015-08-27</time>
     
   </p>
 </header>
@@ -91,21 +95,140 @@
 		
 		</div>
 		
-		<p>#测试一下hexo搭建博客是否成功</p>
-  
+		<p>##MyBatis简介</p>
+<ul>
+<li><p>MyBatis 本是apache的一个开源项目iBatis, 2010年这个项目由apache software foundation 迁移到了google code，并且改名为MyBatis 。2013年11月迁移到Github。</p>
+</li>
+<li><p>iBATIS一词来源于“internet”和“abatis”的组合，是一个基于Java的持久层框架。iBATIS提供的持久层框架包括SQL Maps和Data Access Objects（DAO）。</p>
+</li>
+<li><p>MyBatis 是支持普通 SQL查询，存储过程和高级映射的优秀持久层框架。MyBatis 消除了几乎所有的JDBC代码和参数的手工设置以及结果集的检索。MyBatis 使用简单的 XML或注解用于配置和原始映射，将接口和 Java 的POJOs（Plain Old Java Objects，普通的 Java对象）映射成数据库中的记录。</p>
+</li>
+</ul>
+<p>##MyBatis项目结构</p>
+<ol>
+<li>Congiguration.xml（核心配置文件）</li>
+<li>POJO类（实体类）</li>
+<li>mapper.xml（实体类映射文件）</li>
+</ol>
+<p>####Configuration.xml</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>  
+<span class="doctype">&lt;!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd"&gt;</span>  
+<span class="tag">&lt;<span class="title">configuration</span>&gt;</span>  
+    <span class="tag">&lt;<span class="title">environments</span> <span class="attribute">default</span>=<span class="value">"myexample"</span>&gt;</span>  
+        <span class="tag">&lt;<span class="title">environment</span> <span class="attribute">id</span>=<span class="value">"myexample"</span>&gt;</span>  <span class="comment">&lt;!--连接的数据库信息，--&gt;</span>
+            <span class="tag">&lt;<span class="title">transactionManager</span> <span class="attribute">type</span>=<span class="value">"JDBC"</span> /&gt;</span>  
+            <span class="tag">&lt;<span class="title">dataSource</span> <span class="attribute">type</span>=<span class="value">"POOLED"</span>&gt;</span>  
+                <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"driver"</span> <span class="attribute">value</span>=<span class="value">"com.mysql.jdbc.Driver"</span> /&gt;</span>  
+                <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"url"</span> <span class="attribute">value</span>=<span class="value">"jdbc:mysql://localhost:3306/mybatis"</span> /&gt;</span>  
+                <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"username"</span> <span class="attribute">value</span>=<span class="value">"root"</span> /&gt;</span>  
+                <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"password"</span> <span class="attribute">value</span>=<span class="value">"123456"</span> /&gt;</span>  
+            <span class="tag">&lt;/<span class="title">dataSource</span>&gt;</span>  
+        <span class="tag">&lt;/<span class="title">environment</span>&gt;</span>  
+    <span class="tag">&lt;/<span class="title">environments</span>&gt;</span>  
+    <span class="tag">&lt;<span class="title">mappers</span>&gt;</span>  <span class="comment">&lt;!--映射文件--&gt;</span>
+        <span class="tag">&lt;<span class="title">mapper</span> <span class="attribute">resource</span>=<span class="value">"com/bdqn/entity/person.xml"</span>/&gt;</span>  
+    <span class="tag">&lt;/<span class="title">mappers</span>&gt;</span>  
+<span class="tag">&lt;/<span class="title">configuration</span>&gt;</span> 
+</code></pre><p>####Pojo类Person.java</p>
+<ul>
+<li><p>普通Java类<br>####映射文件Person.xml<br>  &lt;?xml version=”1.0” encoding=”UTF-8” ?&gt;<br>  &lt;!DOCTYPE mapper PUBLIC “-//mybatis.org//DTD Mapper 3.0//EN” “<a href="http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;" target="_blank" rel="external">http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;</a><br>  <mapper namespace="com.bdqn.dao.PersonDao"></mapper></p>
+<pre><code><span class="comment">&lt;!-- 查询全部记录 --&gt;</span>
+<span class="tag">&lt;<span class="title">select</span> <span class="attribute">id</span>=<span class="value">"selectAllUser"</span> <span class="attribute">resultType</span>=<span class="value">"com.bdqn.entity.Person"</span>&gt;</span>
+    select * from person
+<span class="tag">&lt;/<span class="title">select</span>&gt;</span>
+
+<span class="comment">&lt;!-- 根据ID查询 --&gt;</span>
+<span class="tag">&lt;<span class="title">select</span> <span class="attribute">id</span>=<span class="value">"selectUserById"</span> <span class="attribute">parameterType</span>=<span class="value">"int"</span>
+    <span class="attribute">resultType</span>=<span class="value">"com.bdqn.entity.Person"</span>&gt;</span>
+    select * from person where id=#{id}
+<span class="tag">&lt;/<span class="title">select</span>&gt;</span>
+</code></pre></li>
+</ul>
+<pre><code>    <span class="comment">&lt;!-- 增加一条记录 --&gt;</span>
+    <span class="tag">&lt;<span class="title">insert</span> <span class="attribute">id</span>=<span class="value">"addOneUser"</span> <span class="attribute">parameterType</span>=<span class="value">"com.bdqn.entity.Person"</span> <span class="attribute">useGeneratedKeys</span>=<span class="value">"true"</span>
+        <span class="attribute">keyProperty</span>=<span class="value">"id"</span>&gt;</span>
+        insert into person(name,age,sex,password)
+        values(#{name},#{age},#{sex},#{password})
+    <span class="tag">&lt;/<span class="title">insert</span>&gt;</span>
+
+
+    <span class="comment">&lt;!-- 删除一条记录 --&gt;</span>
+    <span class="tag">&lt;<span class="title">delete</span> <span class="attribute">id</span>=<span class="value">"deleteOneUser"</span> <span class="attribute">parameterType</span>=<span class="value">"com.bdqn.entity.Person"</span>&gt;</span>
+        delete from person where id=#{id}
+    <span class="tag">&lt;/<span class="title">delete</span>&gt;</span>
+
+    <span class="comment">&lt;!-- 更新一条记录 --&gt;</span>
+    <span class="tag">&lt;<span class="title">update</span> <span class="attribute">id</span>=<span class="value">"updateOneUser"</span> <span class="attribute">parameterType</span>=<span class="value">"com.bdqn.entity.Person"</span>&gt;</span>
+        update person set name=#{name} where id=#{id}
+    <span class="tag">&lt;/<span class="title">update</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">mapper</span>&gt;</span> 
+</code></pre><p>####Test.java<br>    //获得sqlSession<br>    SqlSessionFactory factory = null;<br>    try {<br>        factory = new SqlSessionFactoryBuilder().build(Resources<br>                .getResourceAsReader(“Configuration.xml”));<br>    } catch (IOException e) {<br>        e.printStackTrace();<br>    }</p>
+<pre><code>SqlSession sqlSession = factory.openSession();
+
+// 增加数据
+ <span class="keyword">Person</span> p = new <span class="keyword">Person</span>();
+ p.setName(<span class="string">"李四"</span>);
+ p.setPassword(<span class="string">"123"</span>);
+ p.setSex(<span class="string">"男"</span>);
+ p.setAge(10);
+ int i = sqlSession.insert(<span class="string">"com.bdqn.dao.PersonDao.addOneUser"</span>,p);
+ if (i &gt; 0) {
+     sqlSession.commit();
+ } else {
+     sqlSession.rollback();
+ }
+
+//删除
+<span class="keyword">Person</span> p = new <span class="keyword">Person</span>();
+p.setId(2);
+int i = sqlSession.delete(<span class="string">"com.bdqn.dao.PersonDao.deleteOneUser"</span>, p);
+if (i &gt; 0) {
+    sqlSession.commit();
+} else {
+    sqlSession.rollback();
+}
+
+// 更新
+<span class="keyword">Person</span> p = new <span class="keyword">Person</span>();
+p.setId(1);
+p.setName(<span class="string">"王武"</span>);
+p.setPassword(<span class="string">"321"</span>);
+p.setSex(<span class="string">"女"</span>);
+p.setAge(30);
+int i = sqlSession.update(<span class="string">"com.bdqn.dao.PersonDao.updateOneUser"</span>, p);
+if (i &gt; 0) {
+    sqlSession.commit();
+} else {
+    sqlSession.rollback();
+}
+
+// 查询所有
+ List&lt;<span class="keyword">Person</span>&gt; list =
+ sqlSession.selectList(<span class="string">"com.bdqn.dao.PersonDao.selectAllUser"</span>);
+ for (Iterator&lt;<span class="keyword">Person</span>&gt; iterator = list.iterator(); iterator.hasNext();) {
+     <span class="keyword">Person</span> p = iterator.next();
+     System.out.println(p.getName());
+     System.out.println(p.getPassword());
+     System.out.println(p.getAge());
+     System.out.println(p.getSex());
+ }
+
+// 根据ID查询
+ <span class="keyword">Person</span> p = (<span class="keyword">Person</span>) sqlSession.selectOne(
+ <span class="string">"com.bdqn.dao.PersonDao.selectUserById"</span>, 1);
+ System.out.println(p.getName());
+ System.out.println(p.getPassword());
+ System.out.println(p.getAge());
+ System.out.println(p.getSex());
+</code></pre>  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/github/">github</a>
-</div>
-
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/github/">github</a><a href="/tags/hexo/">hexo</a>
+  <span></span> <a href="/tags/MyBatis/">MyBatis</a>
   </div>
 
 </div>
@@ -113,7 +236,7 @@
 
 <div class="article-share" id="share">
 
-  <div data-url="http://wangzhibin986.github.io/2015/08/26/我的第一篇博客/" data-title="我的第一篇博客 | Wzb&#39;s Blog" data-tsina="null" class="share clearfix">
+  <div data-url="http://wangzhibin986.github.io/2015/08/27/MyBatis入门/" data-title="MyBatis入门 | Wzb&#39;s Blog" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -124,9 +247,9 @@
  
 
 <div class="next">
-<a href="/2015/08/26/hello-world/"  title="Hello World">
+<a href="/2015/08/26/2015-08-26-maven/"  title="Maven简介">
  <strong>下一篇：</strong><br/> 
- <span>Hello World
+ <span>Maven简介
 </span>
 </a>
 </div>
@@ -168,8 +291,6 @@
 		
 			<li><a href="/categories/Octopress/" title="Octopress">Octopress<sup>2</sup></a></li>
 		
-			<li><a href="/categories/github/" title="github">github<sup>1</sup></a></li>
-		
 		</ul>
 </div>
 
@@ -179,9 +300,7 @@
 	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
-			<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
-		
-			<li><a href="/tags/github/" title="github">github<sup>1</sup></a></li>
+			<li><a href="/tags/MyBatis/" title="MyBatis">MyBatis<sup>1</sup></a></li>
 		
 			<li><a href="/tags/Maven/" title="Maven">Maven<sup>1</sup></a></li>
 		
