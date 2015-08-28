@@ -12,7 +12,9 @@
     
     <meta name="description" content="MyBatis中相关类的作用域和生命周期
 在持久层框架中，类的生命周期显得非常重要，如果使用不当可导致严重的并发性问题。
-SqlSessionFactoryBuilder这个类可以在任何时候被实例化、使用和销毁。一旦您创造了SQLSessionFactory就不需要再保留它了。所以SQLSessio">
+
+SqlSessionFactoryBuilder
+这个类可以在任何时候被实例化、使用和销毁。一旦您创造了SQLSessionFactory就不需要再保留它了。所以SQLSess">
     
     
     
@@ -95,14 +97,22 @@ SqlSessionFactoryBuilder这个类可以在任何时候被实例化、使用和�
 		
 		<h2 id="MyBatis中相关类的作用域和生命周期">MyBatis中相关类的作用域和生命周期</h2><blockquote>
 <p>在持久层框架中，类的生命周期显得非常重要，如果使用不当可导致严重的并发性问题。</p>
-<h3 id="SqlSessionFactoryBuilder">SqlSessionFactoryBuilder</h3><p>这个类可以在任何时候被实例化、使用和销毁。一旦您创造了SQLSessionFactory就不需要再保留它了。所以SQLSessionFactoryBuilder实例的最好的作用域是方法体内（即一个本地方法变量）。您能重用SQLSessionFactoryBuilder创建多个SQLSessionFactory实例，但最好不要把时间、资源放在解析XML文件上，而是要从中解放出来做最重要的事情。</p>
-<h3 id="SQLSessionFactory">SQLSessionFactory</h3><p>一旦创建SQLSessionFactory将会存在于应用程序的整个运行生命周期中。很少或根本没有理由去销毁或重新创建它。最佳的实践是不要在一个应用中多次创建SQLSessionFactory，这样做太不专业了。所以SQLSessionFactory的最好作用域范围是一个应用的生命周期范围。这可以由多种方式来实现，最简单的方式是使用Singleton模式或静态Singleton模式。但这不是被广泛接受的最佳做法，相反，Spirng的依赖注入方式也许是我们最愿意使用的。你可以创建一个管理器用于管理SQLSessionFactory的生命周期。</p>
-<h3 id="SqlSession">SqlSession</h3><p>每一个SqlSession都有一个SqlSession实例，SqlSession实例是不被共享的，并且不是线程安全的。因此最好的作用域是request（一个Http请求范围）或者method（方法体内）。绝不要用一个静态字段或者一个类的实例字段来保存SqlSession的引用。也不要用任何一个管理作用域，如Servlet框架中的HttpSession来保存SqlSession的引用。如果您正在用一个WEB框架，可以把SqlSession的作用域看作类似于HTTP的请求范围。也就是说，在收到一个HTTP请求，您可以打开一个SqlSession，当您把response返回时，就可以把SqlSession关闭。关闭会话是非常重要的，您应该要确保会话在一个finally块中被关闭。</p>
+</blockquote>
+<h3 id="SqlSessionFactoryBuilder">SqlSessionFactoryBuilder</h3><blockquote>
+<p>这个类可以在任何时候被实例化、使用和销毁。一旦您创造了SQLSessionFactory就不需要再保留它了。所以SQLSessionFactoryBuilder实例的最好的作用域是方法体内（即一个本地方法变量）。您能重用SQLSessionFactoryBuilder创建多个SQLSessionFactory实例，但最好不要把时间、资源放在解析XML文件上，而是要从中解放出来做最重要的事情。</p>
+</blockquote>
+<h3 id="SQLSessionFactory">SQLSessionFactory</h3><blockquote>
+<p>一旦创建SQLSessionFactory将会存在于应用程序的整个运行生命周期中。很少或根本没有理由去销毁或重新创建它。最佳的实践是不要在一个应用中多次创建SQLSessionFactory，这样做太不专业了。所以SQLSessionFactory的最好作用域范围是一个应用的生命周期范围。这可以由多种方式来实现，最简单的方式是使用Singleton模式或静态Singleton模式。但这不是被广泛接受的最佳做法，相反，Spirng的依赖注入方式也许是我们最愿意使用的。你可以创建一个管理器用于管理SQLSessionFactory的生命周期。</p>
+</blockquote>
+<h3 id="SqlSession">SqlSession</h3><blockquote>
+<p>每一个SqlSession都有一个SqlSession实例，SqlSession实例是不被共享的，并且不是线程安全的。因此最好的作用域是request（一个Http请求范围）或者method（方法体内）。绝不要用一个静态字段或者一个类的实例字段来保存SqlSession的引用。也不要用任何一个管理作用域，如Servlet框架中的HttpSession来保存SqlSession的引用。如果您正在用一个WEB框架，可以把SqlSession的作用域看作类似于HTTP的请求范围。也就是说，在收到一个HTTP请求，您可以打开一个SqlSession，当您把response返回时，就可以把SqlSession关闭。关闭会话是非常重要的，您应该要确保会话在一个finally块中被关闭。</p>
 </blockquote>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SqlSession session = sqlSessionFactory.openSession();</span><br><span class="line">try&#123;</span><br><span class="line">//<span class="operator"><span class="keyword">do</span> <span class="keyword">work</span></span><br><span class="line">&#125;finally&#123;</span><br><span class="line"><span class="keyword">session</span>.<span class="keyword">close</span>();</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>在您的代码里都使用这一模式将保证所有的数据库资源被正确关闭（如果您没有把您自己的数据库连接传递给MyBatis管理，这就对MyBatis表明您希望自己管理连接）。</p>
-<h3 id="Mapper实例">Mapper实例</h3><p>Mapper是创建来绑定映射语句的接口，该Mapper实例是从SqlSesion得到的。因此，所有Mapper实例的作用域跟创建它的SqlSesion一样。但是mapper实例最好的作用域是method，也就是它们应该在方法内被调用，使用完即被销毁。并且mapper实例不用显示地被关闭。虽然把mapper实例保存在一个request范围（SqlSesion相似）不会产生太大问题，但在这个层次上管理太多资源可能会失控。保持简单，就是让Mappers保持在一个方法内。下面的例子演示了这种做法。</p>
+</blockquote>
+<h3 id="Mapper实例">Mapper实例</h3><blockquote>
+<p>Mapper是创建来绑定映射语句的接口，该Mapper实例是从SqlSesion得到的。因此，所有Mapper实例的作用域跟创建它的SqlSesion一样。但是mapper实例最好的作用域是method，也就是它们应该在方法内被调用，使用完即被销毁。并且mapper实例不用显示地被关闭。虽然把mapper实例保存在一个request范围（SqlSesion相似）不会产生太大问题，但在这个层次上管理太多资源可能会失控。保持简单，就是让Mappers保持在一个方法内。下面的例子演示了这种做法。</p>
 </blockquote>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SqlSession session = sqlSessionFactory.openSession();</span><br><span class="line">try&#123;</span><br><span class="line">	BlogMapper mapper = session.getMapper(BlogMapper.class);</span><br><span class="line">//<span class="operator"><span class="keyword">do</span> <span class="keyword">work</span></span><br><span class="line">&#125;finally&#123;</span><br><span class="line"><span class="keyword">session</span>.<span class="keyword">close</span>();</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>  
 	</div>
