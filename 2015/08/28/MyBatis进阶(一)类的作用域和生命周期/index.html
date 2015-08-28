@@ -5,10 +5,14 @@
   <meta charset="UTF-8">
   <meta name="baidu-site-verification" content="GliC1jSe3E" />
   
-    <title>MyBatis拔高 | Wzb&#39;s Blog</title>
+    <title>MyBatis进阶(一)类的作用域和生命周期 | Wzb&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Wang Zhibin">
+    
+    <meta name="description" content="MyBatis中相关类的作用域和生命周期
+在持久层框架中，类的生命周期显得非常重要，如果使用不当可导致严重的并发性问题。
+SqlSessionFactoryBuilder这个类可以在任何时候被实例化、使用和销毁。一旦您创造了SQLSessionFactory就不需要再保留它了。所以SQLSessio">
     
     
     
@@ -68,14 +72,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/08/27/MyBatis拔高/" title="MyBatis拔高" itemprop="url">MyBatis拔高</a>
+      <a href="/2015/08/28/MyBatis进阶(一)类的作用域和生命周期/" title="MyBatis进阶(一)类的作用域和生命周期" itemprop="url">MyBatis进阶(一)类的作用域和生命周期</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/118224772589648180000?rel=author" title="Wang Zhibin" target="_blank" itemprop="author">Wang Zhibin</a>
 		
   <p class="article-time">
-    <time datetime="2015-08-27T14:48:04.000Z" itemprop="datePublished"> 发表于 2015-08-27</time>
+    <time datetime="2015-08-28T01:59:04.000Z" itemprop="datePublished"> 发表于 2015-08-28</time>
     
   </p>
 </header>
@@ -85,24 +89,35 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MyBatis中相关类的作用域和生命周期"><span class="toc-number">1.</span> <span class="toc-text">MyBatis中相关类的作用域和生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SqlSessionFactoryBuilder"><span class="toc-number">1.1.</span> <span class="toc-text">SqlSessionFactoryBuilder</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQLSessionFactory"><span class="toc-number">1.2.</span> <span class="toc-text">SQLSessionFactory</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SqlSession"><span class="toc-number">1.3.</span> <span class="toc-text">SqlSession</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mapper实例"><span class="toc-number">1.4.</span> <span class="toc-text">Mapper实例</span></a></li></ol></li></ol>
 		
 		</div>
 		
-		  
+		<h2 id="MyBatis中相关类的作用域和生命周期">MyBatis中相关类的作用域和生命周期</h2><blockquote>
+<p>在持久层框架中，类的生命周期显得非常重要，如果使用不当可导致严重的并发性问题。</p>
+<h3 id="SqlSessionFactoryBuilder">SqlSessionFactoryBuilder</h3><p>这个类可以在任何时候被实例化、使用和销毁。一旦您创造了SQLSessionFactory就不需要再保留它了。所以SQLSessionFactoryBuilder实例的最好的作用域是方法体内（即一个本地方法变量）。您能重用SQLSessionFactoryBuilder创建多个SQLSessionFactory实例，但最好不要把时间、资源放在解析XML文件上，而是要从中解放出来做最重要的事情。</p>
+<h3 id="SQLSessionFactory">SQLSessionFactory</h3><p>一旦创建SQLSessionFactory将会存在于应用程序的整个运行生命周期中。很少或根本没有理由去销毁或重新创建它。最佳的实践是不要在一个应用中多次创建SQLSessionFactory，这样做太不专业了。所以SQLSessionFactory的最好作用域范围是一个应用的生命周期范围。这可以由多种方式来实现，最简单的方式是使用Singleton模式或静态Singleton模式。但这不是被广泛接受的最佳做法，相反，Spirng的依赖注入方式也许是我们最愿意使用的。你可以创建一个管理器用于管理SQLSessionFactory的生命周期。</p>
+<h3 id="SqlSession">SqlSession</h3><p>每一个SqlSession都有一个SqlSession实例，SqlSession实例是不被共享的，并且不是线程安全的。因此最好的作用域是request（一个Http请求范围）或者method（方法体内）。绝不要用一个静态字段或者一个类的实例字段来保存SqlSession的引用。也不要用任何一个管理作用域，如Servlet框架中的HttpSession来保存SqlSession的引用。如果您正在用一个WEB框架，可以把SqlSession的作用域看作类似于HTTP的请求范围。也就是说，在收到一个HTTP请求，您可以打开一个SqlSession，当您把response返回时，就可以把SqlSession关闭。关闭会话是非常重要的，您应该要确保会话在一个finally块中被关闭。</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SqlSession session = sqlSessionFactory.openSession();</span><br><span class="line">try&#123;</span><br><span class="line">//<span class="operator"><span class="keyword">do</span> <span class="keyword">work</span></span><br><span class="line">&#125;finally&#123;</span><br><span class="line"><span class="keyword">session</span>.<span class="keyword">close</span>();</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在您的代码里都使用这一模式将保证所有的数据库资源被正确关闭（如果您没有把您自己的数据库连接传递给MyBatis管理，这就对MyBatis表明您希望自己管理连接）。</p>
+<h3 id="Mapper实例">Mapper实例</h3><p>Mapper是创建来绑定映射语句的接口，该Mapper实例是从SqlSesion得到的。因此，所有Mapper实例的作用域跟创建它的SqlSesion一样。但是mapper实例最好的作用域是method，也就是它们应该在方法内被调用，使用完即被销毁。并且mapper实例不用显示地被关闭。虽然把mapper实例保存在一个request范围（SqlSesion相似）不会产生太大问题，但在这个层次上管理太多资源可能会失控。保持简单，就是让Mappers保持在一个方法内。下面的例子演示了这种做法。</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SqlSession session = sqlSessionFactory.openSession();</span><br><span class="line">try&#123;</span><br><span class="line">	BlogMapper mapper = session.getMapper(BlogMapper.class);</span><br><span class="line">//<span class="operator"><span class="keyword">do</span> <span class="keyword">work</span></span><br><span class="line">&#125;finally&#123;</span><br><span class="line"><span class="keyword">session</span>.<span class="keyword">close</span>();</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/MyBatis/">MyBatis</a>
+  <a class="article-category-link" href="/categories/MyBatis/">MyBatis</a>►<a class="article-category-link" href="/categories/MyBatis/J2EE/">J2EE</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/MyBatis/">MyBatis</a>
+  <span></span> <a href="/tags/J2EE/">J2EE</a><a href="/tags/MyBatis，ORM/">MyBatis，ORM</a>
   </div>
 
 </div>
@@ -110,7 +125,7 @@
 
 <div class="article-share" id="share">
 
-  <div data-url="http://wangzhibin986.github.io/2015/08/27/MyBatis拔高/" data-title="MyBatis拔高 | Wzb&#39;s Blog" data-tsina="null" class="share clearfix">
+  <div data-url="http://wangzhibin986.github.io/2015/08/28/MyBatis进阶(一)类的作用域和生命周期/" data-title="MyBatis进阶(一)类的作用域和生命周期 | Wzb&#39;s Blog" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -148,7 +163,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MyBatis中相关类的作用域和生命周期"><span class="toc-number">1.</span> <span class="toc-text">MyBatis中相关类的作用域和生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SqlSessionFactoryBuilder"><span class="toc-number">1.1.</span> <span class="toc-text">SqlSessionFactoryBuilder</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQLSessionFactory"><span class="toc-number">1.2.</span> <span class="toc-text">SQLSessionFactory</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SqlSession"><span class="toc-number">1.3.</span> <span class="toc-text">SqlSession</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mapper实例"><span class="toc-number">1.4.</span> <span class="toc-text">Mapper实例</span></a></li></ol></li></ol>
  
   </div>
 
@@ -163,6 +178,8 @@
 		
 			<li><a href="/categories/J2EE/" title="J2EE">J2EE<sup>1</sup></a></li>
 		
+			<li><a href="/categories/MyBatis/J2EE/" title="J2EE">J2EE<sup>1</sup></a></li>
+		
 			<li><a href="/categories/MyBatis/" title="MyBatis">MyBatis<sup>2</sup></a></li>
 		
 			<li><a href="/categories/Octopress/" title="Octopress">Octopress<sup>2</sup></a></li>
@@ -176,7 +193,7 @@
 	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
-			<li><a href="/tags/MyBatis/" title="MyBatis">MyBatis<sup>2</sup></a></li>
+			<li><a href="/tags/J2EE/" title="J2EE">J2EE<sup>2</sup></a></li>
 		
 			<li><a href="/tags/Maven/" title="Maven">Maven<sup>1</sup></a></li>
 		
@@ -186,7 +203,9 @@
 		
 			<li><a href="/tags/静态博客/" title="静态博客">静态博客<sup>1</sup></a></li>
 		
-			<li><a href="/tags/J2EE/" title="J2EE">J2EE<sup>1</sup></a></li>
+			<li><a href="/tags/MyBatis，ORM/" title="MyBatis，ORM">MyBatis，ORM<sup>1</sup></a></li>
+		
+			<li><a href="/tags/MyBatis/" title="MyBatis">MyBatis<sup>1</sup></a></li>
 		
 		</ul>
 </div>
