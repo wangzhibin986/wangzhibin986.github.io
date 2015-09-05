@@ -1,0 +1,508 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="baidu-site-verification" content="GliC1jSe3E" />
+  
+    <title>Security Tips in Struts2 | Wzb&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Wang Zhibin">
+    
+    <meta name="description" content="Security tipsThe Apache Struts 2 doesn’t provide any security mechanism （Struts2不提供安全机制）- it is just a pure web framework. Below are few tips you shou">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Wzb&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Wzb&#39;s Blog" title="Wzb&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Wzb&#39;s Blog">Wzb&#39;s Blog</a></h1>
+				<h2 class="blog-motto">技术点滴，臻于至善</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="st-search-input" maxlength="20" placeholder="Search" />
+						</form>
+					
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/09/05/Security-Tips-in-Struts2/" title="Security Tips in Struts2" itemprop="url">Security Tips in Struts2</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/118224772589648180000?rel=author" title="Wang Zhibin" target="_blank" itemprop="author">Wang Zhibin</a>
+		
+  <p class="article-time">
+    <time datetime="2015-09-05T06:18:01.000Z" itemprop="datePublished"> 发表于 2015-09-05</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Security_tips"><span class="toc-number">1.</span> <span class="toc-text">Security tips</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Restrict_access_to_the_Config_Browser（限制使用config_brower插件）"><span class="toc-number">1.1.</span> <span class="toc-text">Restrict access to the Config Browser（限制使用config brower插件）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Don’t_mix_different_access_levels_in_the_same_namespace（在同一个命名空间中不混杂不同安全等级的action）"><span class="toc-number">1.2.</span> <span class="toc-text">Don’t mix different access levels in the same namespace（在同一个命名空间中不混杂不同安全等级的action）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Never_expose_JSP_files_directly（不暴露JSP文件）"><span class="toc-number">1.3.</span> <span class="toc-text">Never expose JSP files directly（不暴露JSP文件）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Disable_devMode（项目发布前关闭开发模式）"><span class="toc-number">1.4.</span> <span class="toc-text">Disable devMode（项目发布前关闭开发模式）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Internal_security_mechanism(内部安全机制)"><span class="toc-number">2.</span> <span class="toc-text">Internal security mechanism(内部安全机制)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Accessing_static_methods"><span class="toc-number">2.1.</span> <span class="toc-text">Accessing static methods</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OGNL_is_used_to_call_action’s_methods"><span class="toc-number">2.2.</span> <span class="toc-text">OGNL is used to call action’s methods</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Accepted_/_Excluded_patterns"><span class="toc-number">2.3.</span> <span class="toc-text">Accepted / Excluded patterns</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h2 id="Security_tips">Security tips</h2><p>The Apache Struts 2 doesn’t provide any security mechanism <strong>（Struts2不提供安全机制）</strong>- it is just a pure web framework. Below are few tips you should consider during application development with the Apache Struts 2.</p>
+<h3 id="Restrict_access_to_the_Config_Browser（限制使用config_brower插件）">Restrict access to the Config Browser（限制使用config brower插件）</h3><p><a href="http://struts.apache.org/docs/config-browser-plugin.html" target="_blank" rel="external">Config Browser Plugin</a> exposes internal configuration and should be used only during development phase. If you must use it on production site, we strictly recommend restricting access to it - you can use  Basic Authentication or any other security mechanism <a href="http://shiro.apache.org/" target="_blank" rel="external">(e.g. Apache Shiro)</a></p>
+<h3 id="Don’t_mix_different_access_levels_in_the_same_namespace（在同一个命名空间中不混杂不同安全等级的action）">Don’t mix different access levels in the same namespace（在同一个命名空间中不混杂不同安全等级的action）</h3><p>Very often access to different resources is controlled based on URL patterns, see snippet below. Because of that you cannot mix actions with different security levels in the same namespace. Always group actions in one namespace by security level.</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">&lt;security-constraint&gt;</span></span><br><span class="line">    <span class="variable">&lt;web-resource-collection&gt;</span></span><br><span class="line">        <span class="variable">&lt;web-resource-name&gt;</span>admin<span class="variable">&lt;/web-resource-name&gt;</span></span><br><span class="line">        <span class="variable">&lt;url-pattern&gt;</span>/secure/<span class="keyword">*</span><span class="variable">&lt;/url-pattern&gt;</span></span><br><span class="line">    <span class="variable">&lt;/web-resource-collection&gt;</span></span><br><span class="line">    <span class="variable">&lt;auth-constraint&gt;</span></span><br><span class="line">        <span class="variable">&lt;role-name&gt;</span>admin<span class="variable">&lt;/role-name&gt;</span></span><br><span class="line">    <span class="variable">&lt;/auth-constraint&gt;</span></span><br><span class="line"><span class="variable">&lt;/security-constraint&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Never_expose_JSP_files_directly（不暴露JSP文件）">Never expose JSP files directly（不暴露JSP文件）</h3><p>You must always hide JSP file behind an action, you cannot allow for direct access to the JSP files as this can leads to unpredictable security vulnerabilities. You can achieve this by putting all your JSP files under the <code>WEB-INF</code> folder - most of the JEE containers restrict access to files placed under the WEB-INF folder. Second option is to add security constraint to the <code>web.xml</code> file:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- Restricts access to pure JSP files - access available only via Struts action --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">security-constraint</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">display-name</span>&gt;</span>No direct JSP access<span class="tag">&lt;/<span class="title">display-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">web-resource-collection</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">web-resource-name</span>&gt;</span>No-JSP<span class="tag">&lt;/<span class="title">web-resource-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">url-pattern</span>&gt;</span>*.jsp<span class="tag">&lt;/<span class="title">url-pattern</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="title">web-resource-collection</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">auth-constraint</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="title">role-name</span>&gt;</span>no-users<span class="tag">&lt;/<span class="title">role-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="title">auth-constraint</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">security-constraint</span>&gt;</span></span><br><span class="line"> </span><br><span class="line"><span class="tag">&lt;<span class="title">security-role</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">description</span>&gt;</span>Don't assign users to this role<span class="tag">&lt;/<span class="title">description</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">role-name</span>&gt;</span>no-users<span class="tag">&lt;/<span class="title">role-name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">security-role</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>The best approach is to used the both solutions.</strong></p>
+<h3 id="Disable_devMode（项目发布前关闭开发模式）">Disable devMode（项目发布前关闭开发模式）</h3><p>The <code>devMode</code> is very useful option back can expose your application presenting too many informations of application’s internals. Please always disable the devMode before deploying your application to a production environment.</p>
+<h2 id="Internal_security_mechanism(内部安全机制)">Internal security mechanism(内部安全机制)</h2><p>The Apache Struts 2 contains internal security manager which blocks access to particular classes and Java packages - it’s a OGNL-wide mechanism which means it affects any aspect of the framework ie. incoming parameters, expressions used in JSPs, etc.</p>
+<p>The defaults are as follow:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">constant</span> <span class="attribute">name</span>=<span class="value">"struts.excludedClasses"</span></span><br><span class="line">          <span class="attribute">value</span>=<span class="value">"</span><br><span class="line">            java.lang.Object,</span><br><span class="line">            java.lang.Runtime,</span><br><span class="line">            java.lang.System,</span><br><span class="line">            java.lang.Class,</span><br><span class="line">            java.lang.ClassLoader,</span><br><span class="line">            java.lang.Shutdown,</span><br><span class="line">            ognl.OgnlContext,</span><br><span class="line">            ognl.MemberAccess,</span><br><span class="line">            ognl.ClassResolver,</span><br><span class="line">            ognl.TypeConverter,</span><br><span class="line">            com.opensymphony.xwork2.ActionContext"</span> /&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- this must be valid regex, each '.' in package name must be escaped! --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">constant</span> <span class="attribute">name</span>=<span class="value">"struts.excludedPackageNamePatterns"</span> <span class="attribute">value</span>=<span class="value">"^java\.lang\..*,^ognl.*,^javax.*"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Any expression or target which evaluates to one of these will be blocked and you see a WARN in logs:</p>
+<figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[WARNING] Target <span class="keyword">class</span> [<span class="keyword">class</span> example.MyBean] <span class="keyword">or</span> declaring <span class="keyword">class</span> <span class="keyword">of</span> <span class="keyword">member</span> <span class="class"><span class="keyword">type</span> [<span class="title">public</span> <span class="title">example</span>.<span class="title">MyBean</span></span>()] are excluded!</span><br></pre></td></tr></table></figure>
+<p>In that case <code>new MyBean()</code> was used to create a new instance of class (inside JSP) - it’s blocked because target of such expression is evaluated to java.lang.Class</p>
+<p>It is possible to redefine the above constants in <code>struts.xml</code> but try to avoid this and rather change design of your application!</p>
+<h3 id="Accessing_static_methods">Accessing static methods</h3><p><code>Support for accessing static methods from expression will be disabled soon, please consider re-factoring your application to avoid further problems! Please check</code> <a href="https://issues.apache.org/jira/browse/WW-4348" target="_blank" rel="external">WW-4348</a>.</p>
+<h3 id="OGNL_is_used_to_call_action’s_methods">OGNL is used to call action’s methods</h3><p>This can impact actions which have large inheritance hierarchy and use the same method’s name throughout the hierarchy, this was reported as an issue <a href="https://issues.apache.org/jira/browse/WW-4405" target="_blank" rel="external">WW-4405</a>. See the example below:</p>
+<pre><code>public <span class="class"><span class="keyword">class</span> <span class="title">RealAction</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">BaseAction</span> {</span>  
+    <span class="annotation">@Action</span>(<span class="string">"save"</span>)
+    public <span class="type">String</span> save() <span class="keyword">throws</span> <span class="type">Exception</span> {
+        <span class="keyword">super</span>.save();
+        <span class="keyword">return</span> <span class="type">SUCCESS</span>;
+    }
+}    
+public <span class="class"><span class="keyword">class</span> <span class="title">BaseAction</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">AbstractAction</span> {</span>
+    public <span class="type">String</span> save() <span class="keyword">throws</span> <span class="type">Exception</span> {
+        save(<span class="type">Double</span>.<span class="type">MAX_VALUE</span>);
+        <span class="keyword">return</span> <span class="type">SUCCESS</span>;
+    }
+}  
+public <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractAction</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">ActionSupport</span> {</span>
+    <span class="keyword">protected</span> void save(<span class="type">Double</span> <span class="function"><span class="keyword">val</span>) {</span>
+        <span class="comment">// some logic</span>
+    }
+}
+</code></pre><p>In such case OGNL cannot properly map which method to call when request is coming. This is do the OGNL limitation. To solve the problem don’t use the same method’s names through the hierarchy, you can simply change the action’s method from <code>save()</code> to <code>saveAction()</code> and leaving annotation as is to allow call this action via <code>/save.action</code> request.</p>
+<h3 id="Accepted_/_Excluded_patterns">Accepted / Excluded patterns</h3><p>As from version 2.3.20 the framework provides two new interfaces which are used to accept / exclude param names and values - AcceptedPatternsChecker and ExcludedPatternsChecker with default implementations. These two interfaces are used by Parameters Interceptor and Cookie Interceptor to check if param can accepted or must be excluded. If you were using <code>excludeParams</code> previously please compare patterns used by you with these provided by the framework in default implementation.</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://wangzhibin986.github.io/2015/09/05/Security-Tips-in-Struts2/" data-title="Security Tips in Struts2 | Wzb&#39;s Blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/09/05/Key-Technologies-Primer-Of-Java-Web/"  title="Key Technologies Primer of Java Web">
+ <strong>下一篇：</strong><br/> 
+ <span>Key Technologies Primer of Java Web
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+
+<section class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Security_tips"><span class="toc-number">1.</span> <span class="toc-text">Security tips</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Restrict_access_to_the_Config_Browser（限制使用config_brower插件）"><span class="toc-number">1.1.</span> <span class="toc-text">Restrict access to the Config Browser（限制使用config brower插件）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Don’t_mix_different_access_levels_in_the_same_namespace（在同一个命名空间中不混杂不同安全等级的action）"><span class="toc-number">1.2.</span> <span class="toc-text">Don’t mix different access levels in the same namespace（在同一个命名空间中不混杂不同安全等级的action）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Never_expose_JSP_files_directly（不暴露JSP文件）"><span class="toc-number">1.3.</span> <span class="toc-text">Never expose JSP files directly（不暴露JSP文件）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Disable_devMode（项目发布前关闭开发模式）"><span class="toc-number">1.4.</span> <span class="toc-text">Disable devMode（项目发布前关闭开发模式）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Internal_security_mechanism(内部安全机制)"><span class="toc-number">2.</span> <span class="toc-text">Internal security mechanism(内部安全机制)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Accessing_static_methods"><span class="toc-number">2.1.</span> <span class="toc-text">Accessing static methods</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OGNL_is_used_to_call_action’s_methods"><span class="toc-number">2.2.</span> <span class="toc-text">OGNL is used to call action’s methods</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Accepted_/_Excluded_patterns"><span class="toc-number">2.3.</span> <span class="toc-text">Accepted / Excluded patterns</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/J2EE/" title="J2EE">J2EE<sup>1</sup></a></li>
+		
+			<li><a href="/categories/MyBatis/J2EE/" title="J2EE">J2EE<sup>1</sup></a></li>
+		
+			<li><a href="/categories/Java-Web/" title="Java Web">Java Web<sup>1</sup></a></li>
+		
+			<li><a href="/categories/Java面向对象/" title="Java面向对象">Java面向对象<sup>1</sup></a></li>
+		
+			<li><a href="/categories/MyBatis/" title="MyBatis">MyBatis<sup>2</sup></a></li>
+		
+			<li><a href="/categories/Octopress/" title="Octopress">Octopress<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/J2EE/" title="J2EE">J2EE<sup>2</sup></a></li>
+		
+			<li><a href="/tags/Maven/" title="Maven">Maven<sup>1</sup></a></li>
+		
+			<li><a href="/tags/GitHub/" title="GitHub">GitHub<sup>1</sup></a></li>
+		
+			<li><a href="/tags/静态博客/" title="静态博客">静态博客<sup>1</sup></a></li>
+		
+			<li><a href="/tags/MyBatis，ORM/" title="MyBatis，ORM">MyBatis，ORM<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Octopress/" title="Octopress">Octopress<sup>1</sup></a></li>
+		
+			<li><a href="/tags/MyBatis/" title="MyBatis">MyBatis<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Java-Web/" title="Java Web">Java Web<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Java面向对象/" title="Java面向对象">Java面向对象<sup>1</sup></a></li>
+		
+			<li><a href="/tags/反射/" title="反射">反射<sup>1</sup></a></li>
+		
+			<li><a href="/tags/通用Dao的编写/" title="通用Dao的编写">通用Dao的编写<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+	  <li><a href="http://blog.csdn.net/" target="_blank" title="CSDN">CSDN博客专栏</a></li> 
+	  <li><a href="http://www.jikexueyuan.com/" target="_blank" title="jkxy">极客学院</a><li>
+      <li><a href="http://blog.csdn.net/u011562098" target="_blank" title="csdn">我的CSDN的专栏</a></li>
+	  <li><a href="http://blog.csdn.net/jkxqj" target="_blank" title="JKXQJ">JKXQJ的博客专栏</a></li> 
+	  <li><a href="http://belief1992.com/" target="_blank" title="Belief">Belief's Blog</a></li> 
+	  </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div align="center">
+<br/>
+	欢迎第
+	<a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3183127&c=9549694" alt="AmazingCounters.com">
+	</a>
+	位访问者
+</div> 
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Labeling is cheap. Show me the story <br/>
+			 </p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/Alexyyek" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		<a href="https://www.douban.com/people/57383464" target="_blank" class="icon-douban" title="豆瓣"></a>
+		
+		
+		<a href="https://plus.google.com/118224772589648180000?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:alexyyek@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2015 
+		
+		<a href="http://wangzhibin986.github.io/about" target="_blank" title="Wang Zhibin">Wang Zhibin</a>
+		
+		</p>
+	<script type="text/javascript">
+		(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+		(w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+		e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+		})(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+		_st('install','qQj4JhkszWwyk_cTequy');
+	</script>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"alexyyek"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F140dd3dc3eb949d6e77762baa6202ce9' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]} 
+}); 
+</script>
+<script type="text/javascript"
+   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+<!-- Analytics Begin -->
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F140dd3dc3eb949d6e77762baa6202ce9' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+  </body>
+</html>
