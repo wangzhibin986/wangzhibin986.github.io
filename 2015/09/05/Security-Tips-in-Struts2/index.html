@@ -106,7 +106,7 @@
 <figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[WARNING] Target <span class="keyword">class</span> [<span class="keyword">class</span> example.MyBean] <span class="keyword">or</span> declaring <span class="keyword">class</span> <span class="keyword">of</span> <span class="keyword">member</span> <span class="class"><span class="keyword">type</span> [<span class="title">public</span> <span class="title">example</span>.<span class="title">MyBean</span></span>()] are excluded!</span><br></pre></td></tr></table></figure>
 <p>In that case <code>new MyBean()</code> was used to create a new instance of class (inside JSP) - it’s blocked because target of such expression is evaluated to java.lang.Class</p>
 <p>It is possible to redefine the above constants in <code>struts.xml</code> but try to avoid this and rather change design of your application!</p>
-<h3 id="Accessing_static_methods">Accessing static methods</h3><p><code>Support for accessing static methods from expression will be disabled soon, please consider re-factoring your application to avoid further problems! Please check</code> <a href="https://issues.apache.org/jira/browse/WW-4348" target="_blank" rel="external">WW-4348</a>.</p>
+<h3 id="Accessing_static_methods">Accessing static methods</h3><p><strong>Support for accessing static methods from expression will be disabled soon, please consider re-factoring<br> your application to avoid further problems! Please check <a href="https://issues.apache.org/jira/browse/WW-4348" target="_blank" rel="external">WW-4348</a>.</strong></p>
 <h3 id="OGNL_is_used_to_call_action’s_methods">OGNL is used to call action’s methods</h3><p>This can impact actions which have large inheritance hierarchy and use the same method’s name throughout the hierarchy, this was reported as an issue <a href="https://issues.apache.org/jira/browse/WW-4405" target="_blank" rel="external">WW-4405</a>. See the example below:</p>
 <pre><code>public <span class="class"><span class="keyword">class</span> <span class="title">RealAction</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">BaseAction</span> {</span>  
     <span class="annotation">@Action</span>(<span class="string">"save"</span>)
@@ -133,6 +133,16 @@ public <span class="keyword">abstract</span> <span class="class"><span class="ke
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/security/">security</a>►<a class="article-category-link" href="/categories/security/struts2/">struts2</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/security/">security</a><a href="/tags/struts2/">struts2</a>
+  </div>
 
 </div>
 
@@ -202,6 +212,10 @@ public <span class="keyword">abstract</span> <span class="class"><span class="ke
 		
 			<li><a href="/categories/Octopress/" title="Octopress">Octopress<sup>2</sup></a></li>
 		
+			<li><a href="/categories/security/" title="security">security<sup>1</sup></a></li>
+		
+			<li><a href="/categories/security/struts2/" title="struts2">struts2<sup>1</sup></a></li>
+		
 		</ul>
 </div>
 
@@ -213,15 +227,19 @@ public <span class="keyword">abstract</span> <span class="class"><span class="ke
 		
 			<li><a href="/tags/J2EE/" title="J2EE">J2EE<sup>2</sup></a></li>
 		
-			<li><a href="/tags/Maven/" title="Maven">Maven<sup>1</sup></a></li>
+			<li><a href="/tags/MyBatis，ORM/" title="MyBatis，ORM">MyBatis，ORM<sup>1</sup></a></li>
+		
+			<li><a href="/tags/struts2/" title="struts2">struts2<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Octopress/" title="Octopress">Octopress<sup>1</sup></a></li>
 		
 			<li><a href="/tags/GitHub/" title="GitHub">GitHub<sup>1</sup></a></li>
 		
 			<li><a href="/tags/静态博客/" title="静态博客">静态博客<sup>1</sup></a></li>
 		
-			<li><a href="/tags/MyBatis，ORM/" title="MyBatis，ORM">MyBatis，ORM<sup>1</sup></a></li>
+			<li><a href="/tags/security/" title="security">security<sup>1</sup></a></li>
 		
-			<li><a href="/tags/Octopress/" title="Octopress">Octopress<sup>1</sup></a></li>
+			<li><a href="/tags/Maven/" title="Maven">Maven<sup>1</sup></a></li>
 		
 			<li><a href="/tags/MyBatis/" title="MyBatis">MyBatis<sup>1</sup></a></li>
 		
