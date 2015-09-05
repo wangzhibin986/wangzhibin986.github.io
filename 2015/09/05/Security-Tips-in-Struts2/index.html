@@ -106,7 +106,7 @@
 <figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[WARNING] Target <span class="keyword">class</span> [<span class="keyword">class</span> example.MyBean] <span class="keyword">or</span> declaring <span class="keyword">class</span> <span class="keyword">of</span> <span class="keyword">member</span> <span class="class"><span class="keyword">type</span> [<span class="title">public</span> <span class="title">example</span>.<span class="title">MyBean</span></span>()] are excluded!</span><br></pre></td></tr></table></figure>
 <p>In that case <code>new MyBean()</code> was used to create a new instance of class (inside JSP) - it’s blocked because target of such expression is evaluated to java.lang.Class</p>
 <p>It is possible to redefine the above constants in <code>struts.xml</code> but try to avoid this and rather change design of your application!</p>
-<h3 id="Accessing_static_methods">Accessing static methods</h3><p><strong>Support for accessing static methods from expression will be disabled soon, please consider re-factoring<br> your application to avoid further problems! Please check <a href="https://issues.apache.org/jira/browse/WW-4348" target="_blank" rel="external">WW-4348</a>.</strong></p>
+<h3 id="Accessing_static_methods">Accessing static methods</h3><p>Support for accessing static methods from expression will be disabled soon, please consider re-factoring your application to avoid further problems! Please check <a href="https://issues.apache.org/jira/browse/WW-4348" target="_blank" rel="external">WW-4348</a></p>
 <h3 id="OGNL_is_used_to_call_action’s_methods">OGNL is used to call action’s methods</h3><p>This can impact actions which have large inheritance hierarchy and use the same method’s name throughout the hierarchy, this was reported as an issue <a href="https://issues.apache.org/jira/browse/WW-4405" target="_blank" rel="external">WW-4405</a>. See the example below:</p>
 <pre><code>public <span class="class"><span class="keyword">class</span> <span class="title">RealAction</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">BaseAction</span> {</span>  
     <span class="annotation">@Action</span>(<span class="string">"save"</span>)
@@ -114,7 +114,7 @@
         <span class="keyword">super</span>.save();
         <span class="keyword">return</span> <span class="type">SUCCESS</span>;
     }
-}    
+}   
 public <span class="class"><span class="keyword">class</span> <span class="title">BaseAction</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">AbstractAction</span> {</span>
     public <span class="type">String</span> save() <span class="keyword">throws</span> <span class="type">Exception</span> {
         save(<span class="type">Double</span>.<span class="type">MAX_VALUE</span>);
