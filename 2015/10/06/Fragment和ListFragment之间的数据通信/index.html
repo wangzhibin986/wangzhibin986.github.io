@@ -1,0 +1,521 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <meta name="baidu-site-verification" content="GliC1jSe3E" />
+  
+    <title>Fragment和ListFragment之间的数据通信 | Wzb&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Wang Zhibin">
+    
+    <meta name="description" content="Fragment在Android的UI布局中起着重要作用，要掌握Fragment使用必须从Fragment的创建，替换，删除开始，了解Fragment的生命周期，以及系统内置的3个Fragment(DialogFragment,ListFragment,PrefrenceFragment)的使用以及">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Wzb&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Wzb&#39;s Blog" title="Wzb&#39;s Blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Wzb&#39;s Blog">Wzb&#39;s Blog</a></h1>
+				<h2 class="blog-motto">技术点滴，臻于至善</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+					<li>
+ 					
+						<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="st-search-input" maxlength="20" placeholder="Search" />
+						</form>
+					
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/10/06/Fragment和ListFragment之间的数据通信/" title="Fragment和ListFragment之间的数据通信" itemprop="url">Fragment和ListFragment之间的数据通信</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="https://plus.google.com/118224772589648180000?rel=author" title="Wang Zhibin" target="_blank" itemprop="author">Wang Zhibin</a>
+		
+  <p class="article-time">
+    <time datetime="2015-10-06T15:35:21.000Z" itemprop="datePublished"> 发表于 2015-10-06</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			
+		
+		</div>
+		
+		<p>Fragment在Android的UI布局中起着重要作用，要掌握Fragment使用必须从Fragment的创建，替换，删除开始，了解Fragment的生命周期，以及系统内置的3个Fragment(DialogFragment,ListFragment,PrefrenceFragment)的使用以及Fragment之间，Fragment和Activity之间的通信等。这篇博客就以一个实际例子来介绍一下Fragment和ListFragment之间的通信是如何实现的。</p>
+<p>一、要求：如下图所示。实现从EditText中输入数据，按Enter键后内容添加到下面的ListFragment中，并为ListFragment的Item添加点击事件显示Item的内容。其中EditText包含在一个Fragment中。</p>
+<p><img src="http://i.imgur.com/6YwhQFK.png" alt=""></p>
+<p>二、实现思路：</p>
+<ol>
+<li>编写主布局文件，用fragment标签搭建activity的UI。</li>
+<li>编写NewItemFragment和TODOListFragment类，分别继承Fragment和ListFragment,并重写相应方法。</li>
+<li>编写NewItemFragment对应的布局文件new_item_fragment.xml。</li>
+<li>编写MainActivity，继承Activity,实现NewItemFragment中的OnNewItemAddedListener接口，实现数据传递。</li>
+</ol>
+<blockquote>
+<p>通过接口回调的方式实现Fragment之间以及Fragment和Activity直接的数据通信可以大大减小Fragment之间的耦合度，增强可复用性。</p>
+</blockquote>
+<p>三、代码实现</p>
+<p>主布局文件activity_main.xml</p>
+<pre><code><span class="comment"><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;LinearLayout xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">    xmlns:tools=<span class="string">"http://schemas.android.com/tools"</span></span><br><span class="line">    android:layout_width=<span class="string">"match_parent"</span></span><br><span class="line">    android:layout_height=<span class="string">"match_parent"</span></span><br><span class="line">    android:orientation=<span class="string">"vertical"</span></span><br><span class="line">    &gt;</span><br><span class="line">    &lt;fragment </span><br><span class="line">        android:<span class="property">id</span>=<span class="string">"@+id/id_etx_new_item"</span></span><br><span class="line">        android:<span class="property">name</span>=<span class="string">"com.example.listfragment.NewItemFragment"</span></span><br><span class="line">        android:layout_width=<span class="string">"match_parent"</span></span><br><span class="line">        android:layout_height=<span class="string">"40dp"</span></span><br><span class="line">        /&gt;</span><br><span class="line">    &lt;fragment </span><br><span class="line">        android:<span class="property">id</span>=<span class="string">"@+id/id_lv_todo"</span></span><br><span class="line">        android:<span class="property">name</span>=<span class="string">"com.example.listfragment.ToDoListFragment"</span></span><br><span class="line">        android:layout_width=<span class="string">"match_parent"</span></span><br><span class="line">        android:layout_height=<span class="string">"wrap_content"</span></span><br><span class="line">        /&gt;</span><br><span class="line">&lt;/LinearLayout&gt;</span><br></pre></td></tr></table></figure></span>
+</code></pre><p>NewItemFragment对应的布局文件 new_item_fragment.xml</p>
+<pre><code><span class="comment"><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="title">EditText</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line"><span class="attribute">android:id</span>=<span class="value">"@+id/id_etx_new_item"</span></span><br><span class="line"><span class="attribute">android:layout_width</span>=<span class="value">"match_parent"</span></span><br><span class="line"><span class="attribute">android:layout_height</span>=<span class="value">"match_parent"</span></span><br><span class="line"> &gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">EditText</span>&gt;</span></span><br></pre></td></tr></table></figure></span>
+</code></pre><p>NewItemFragment.java</p>
+<pre><code><span class="comment"><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.listfragment;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.app.Activity;</span><br><span class="line"><span class="keyword">import</span> android.app.Fragment;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.view.KeyEvent;</span><br><span class="line"><span class="keyword">import</span> android.view.LayoutInflater;</span><br><span class="line"><span class="keyword">import</span> android.view.View;</span><br><span class="line"><span class="keyword">import</span> android.view.View.OnKeyListener;</span><br><span class="line"><span class="keyword">import</span> android.view.ViewGroup;</span><br><span class="line"><span class="keyword">import</span> android.widget.EditText;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NewItemFragment</span> <span class="keyword">extends</span> <span class="title">Fragment</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> EditText editText;</span><br><span class="line">	<span class="comment">//声明一个接口引用变量</span></span><br><span class="line">	<span class="keyword">private</span> OnNewItemAddedListener onNewItemAddedListener;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//声明一个接口，定义你要想Activity传值的方法</span></span><br><span class="line">	<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">OnNewItemAddedListener</span></span>&#123;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">newItemAdded</span><span class="params">(String content)</span></span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//重写OnAttach方法</span></span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAttach</span><span class="params">(Activity activity)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>.onAttach(activity);</span><br><span class="line">		<span class="comment">//要求改Fragment附着的Activity必须完成这个方法实现</span></span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			onNewItemAddedListener = (OnNewItemAddedListener)activity;</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> ClassCastException(activity.toString()+<span class="string">" must implements OnNewItemAddedListener"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> View <span class="title">onCreateView</span><span class="params">(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">		View view = inflater.inflate(R.layout.new_item_fragment, container,<span class="keyword">false</span>);</span><br><span class="line">		editText = (EditText) view.findViewById(R.id.id_etx_new_item);</span><br><span class="line">		editText.setOnKeyListener(<span class="keyword">new</span> OnKeyListener() &#123;</span><br><span class="line">			</span><br><span class="line">			<span class="annotation">@Override</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onKey</span><span class="params">(View v, <span class="keyword">int</span> keyCode, KeyEvent event)</span> </span>&#123;</span><br><span class="line">				<span class="keyword">if</span>(event.getAction() == KeyEvent.ACTION_DOWN)&#123;</span><br><span class="line">					<span class="keyword">if</span>(keyCode == KeyEvent.KEYCODE_ENTER)&#123;</span><br><span class="line">						String content = editText.getText().toString();</span><br><span class="line">						editText.setText(<span class="string">""</span>);</span><br><span class="line">						onNewItemAddedListener.newItemAdded(content);</span><br><span class="line">						<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line">		<span class="keyword">return</span> view;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></span>
+</code></pre><p>ToDoListFragment.java</p>
+<pre><code><span class="comment"><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.example.listfragment;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.app.<span class="type">ListFragment</span>;</span><br><span class="line"><span class="keyword">import</span> android.view.<span class="type">View</span>;</span><br><span class="line"><span class="keyword">import</span> android.widget.<span class="type">ListView</span>;</span><br><span class="line"><span class="keyword">import</span> android.widget.<span class="type">Toast</span>;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">ToDoListFragment</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">ListFragment</span> &#123;</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//重写监听事件</span></span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	public void onListItemClick(<span class="type">ListView</span> l, <span class="type">View</span> v, int position, long id) &#123;</span><br><span class="line">		<span class="keyword">super</span>.onListItemClick(l, v, position, id);</span><br><span class="line">		<span class="type">Toast</span>.makeText(getActivity(), <span class="string">""</span>+l.getItemAtPosition(position), <span class="number">2000</span>).show();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></span>
+</code></pre><p>MainActivity.java</p>
+<pre><code><span class="comment"><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">package com.example.listfragment;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.example.listfragment.NewItemFragment.OnNewItemAddedListener;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.R.anim;</span><br><span class="line"><span class="keyword">import</span> android.app.Activity;</span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.view.Menu;</span><br><span class="line"><span class="keyword">import</span> android.view.MenuItem;</span><br><span class="line"><span class="keyword">import</span> android.widget.ArrayAdapter;</span><br><span class="line"><span class="keyword">import</span> android.widget.Toast;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">IndexActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> <span class="title">implements</span> <span class="title">OnNewItemAddedListener</span></span>&#123;</span><br><span class="line">	private ArrayList&lt;<span class="built_in">String</span>&gt; data;</span><br><span class="line">	private ArrayAdapter&lt;<span class="built_in">String</span>&gt; adapter;</span><br><span class="line">	</span><br><span class="line">	@Override</span><br><span class="line">	protected <span class="keyword">void</span> onCreate(Bundle savedInstanceState) &#123;</span><br><span class="line">		<span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">		setContentView(R.layout.activity_main);</span><br><span class="line">	</span><br><span class="line">		<span class="comment">//构建你的数据</span></span><br><span class="line">		</span><br><span class="line">		data = <span class="keyword">new</span> ArrayList&lt;<span class="built_in">String</span>&gt;();</span><br><span class="line">		data.add(<span class="string">"Jack"</span>);</span><br><span class="line">		data.add(<span class="string">"Tina"</span>);</span><br><span class="line">		data.add(<span class="string">"Tom"</span>);</span><br><span class="line">		<span class="comment">//构建适配器</span></span><br><span class="line">		adapter = <span class="keyword">new</span> ArrayAdapter&lt;<span class="built_in">String</span>&gt;(<span class="keyword">this</span>,android.R.layout.simple_list_item_1,data);</span><br><span class="line">		<span class="comment">//给ListFragment绑定适配器</span></span><br><span class="line">		ToDoListFragment fragment = (ToDoListFragment)getFragmentManager().findFragmentById(R.id.id_lv_todo);</span><br><span class="line">		fragment.setListAdapter(adapter);</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public <span class="keyword">void</span> newItemAdded(<span class="built_in">String</span> content) &#123;</span><br><span class="line">		Toast.makeText(<span class="keyword">this</span>, content, Toast.LENGTH_SHORT).show();</span><br><span class="line">		<span class="comment">//把数据加入数据源</span></span><br><span class="line">		data.add(content);</span><br><span class="line">		<span class="comment">//通知适配器进行数据更新</span></span><br><span class="line">		adapter.notifyDataSetChanged();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></span>
+</code></pre>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Android/">Android</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Android/">Android</a><a href="/tags/高级UI/">高级UI</a>
+  </div>
+
+</div>
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://wangzhibin986.github.io/2015/10/06/Fragment和ListFragment之间的数据通信/" data-title="Fragment和ListFragment之间的数据通信 | Wzb&#39;s Blog" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/09/27/Android-ShareSDK实现App的社会化功能/"  title="Android ShareSDK实现App的社会化功能">
+ <strong>下一篇：</strong><br/> 
+ <span>Android ShareSDK实现App的社会化功能
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+
+<section class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ 
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/Android/" title="Android">Android<sup>2</sup></a></li>
+		
+			<li><a href="/categories/J2EE/" title="J2EE">J2EE<sup>1</sup></a></li>
+		
+			<li><a href="/categories/MyBatis/J2EE/" title="J2EE">J2EE<sup>1</sup></a></li>
+		
+			<li><a href="/categories/Java-Web/" title="Java Web">Java Web<sup>1</sup></a></li>
+		
+			<li><a href="/categories/Java面向对象/" title="Java面向对象">Java面向对象<sup>1</sup></a></li>
+		
+			<li><a href="/categories/MyBatis/" title="MyBatis">MyBatis<sup>3</sup></a></li>
+		
+			<li><a href="/categories/Octopress/" title="Octopress">Octopress<sup>2</sup></a></li>
+		
+			<li><a href="/categories/security/" title="security">security<sup>1</sup></a></li>
+		
+			<li><a href="/categories/security/struts2/" title="struts2">struts2<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/MyBatis/" title="MyBatis">MyBatis<sup>2</sup></a></li>
+		
+			<li><a href="/tags/J2EE/" title="J2EE">J2EE<sup>2</sup></a></li>
+		
+			<li><a href="/tags/struts2/" title="struts2">struts2<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Octopress/" title="Octopress">Octopress<sup>1</sup></a></li>
+		
+			<li><a href="/tags/GitHub/" title="GitHub">GitHub<sup>1</sup></a></li>
+		
+			<li><a href="/tags/静态博客/" title="静态博客">静态博客<sup>1</sup></a></li>
+		
+			<li><a href="/tags/MyBatis，ORM/" title="MyBatis，ORM">MyBatis，ORM<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Maven/" title="Maven">Maven<sup>1</sup></a></li>
+		
+			<li><a href="/tags/security/" title="security">security<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Java-Web/" title="Java Web">Java Web<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Java面向对象/" title="Java面向对象">Java面向对象<sup>1</sup></a></li>
+		
+			<li><a href="/tags/反射/" title="反射">反射<sup>1</sup></a></li>
+		
+			<li><a href="/tags/通用Dao的编写/" title="通用Dao的编写">通用Dao的编写<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Android/" title="Android">Android<sup>1</sup></a></li>
+		
+			<li><a href="/tags/高级UI/" title="高级UI">高级UI<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Android第三方组件/" title="Android第三方组件">Android第三方组件<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+	  <li><a href="http://blog.csdn.net/" target="_blank" title="CSDN">CSDN博客专栏</a></li> 
+	  <li><a href="http://www.jikexueyuan.com/" target="_blank" title="jkxy">极客学院</a><li>
+      <li><a href="http://blog.csdn.net/u011562098" target="_blank" title="csdn">我的CSDN的专栏</a></li>
+	  <li><a href="http://blog.csdn.net/jkxqj" target="_blank" title="JKXQJ">JKXQJ的博客专栏</a></li> 
+	  <li><a href="http://belief1992.com/" target="_blank" title="Belief">Belief's Blog</a></li> 
+	  </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div align="center">
+<br/>
+	欢迎第
+	<a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3183127&c=9549694" alt="AmazingCounters.com">
+	</a>
+	位访问者
+</div> 
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Labeling is cheap. Show me the story <br/>
+			 </p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/Alexyyek" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		<a href="https://www.douban.com/people/57383464" target="_blank" class="icon-douban" title="豆瓣"></a>
+		
+		
+		<a href="https://plus.google.com/118224772589648180000?rel=author" target="_blank" class="icon-google_plus" title="Google+"></a>
+		
+		
+		<a href="mailto:alexyyek@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Pacman">Jacman</a> © 2015 
+		
+		<a href="http://wangzhibin986.github.io/about" target="_blank" title="Wang Zhibin">Wang Zhibin</a>
+		
+		</p>
+	<script type="text/javascript">
+		(function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+		(w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+		e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+		})(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+		_st('install','qQj4JhkszWwyk_cTequy');
+	</script>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"alexyyek"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F140dd3dc3eb949d6e77762baa6202ce9' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script type="text/x-mathjax-config"> 
+MathJax.Hub.Config({ 
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]} 
+}); 
+</script>
+<script type="text/javascript"
+   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+<!-- Analytics Begin -->
+
+
+
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F140dd3dc3eb949d6e77762baa6202ce9' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+  </body>
+</html>
