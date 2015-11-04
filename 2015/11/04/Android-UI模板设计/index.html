@@ -103,7 +103,9 @@ Androi">
 <li>在MainActivity中实现Topbar中的接口，实现回调方法</li>
 </ol>
 <p>详细代码实现如下：</p>
+<blockquote>
 <p>attrs.xml</p>
+</blockquote>
 <pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
 <span class="tag">&lt;<span class="title">resources</span>&gt;</span>
     <span class="tag">&lt;<span class="title">declare-styleable</span> <span class="attribute">name</span>=<span class="value">"Topbar"</span>&gt;</span>
@@ -118,7 +120,9 @@ Androi">
         <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"rightText"</span> <span class="attribute">format</span>=<span class="value">"string"</span>/&gt;</span>
     <span class="tag">&lt;/<span class="title">declare-styleable</span>&gt;</span>
 <span class="tag">&lt;/<span class="title">resources</span>&gt;</span>    
-</code></pre><p>Topbar.java 自定义UI类</p>
+</code></pre><blockquote>
+<p>Topbar.java 自定义UI类</p>
+</blockquote>
 <pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Topbar</span> <span class="keyword">extends</span> <span class="title">RelativeLayout</span> </span>{
 <span class="keyword">private</span> Button mLeftButton,mRightButton;
 <span class="keyword">private</span> TextView mTitle;
@@ -218,7 +222,9 @@ Androi">
     });
 }
 }
-</code></pre><p>activity_main.xml主布局文件</p>
+</code></pre><blockquote>
+<p>activity_main.xml主布局文件</p>
+</blockquote>
 <pre><code>&lt;RelativeLayout xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span>
 xmlns:<span class="keyword">custom</span>=<span class="string">"http://schemas.android.com/apk/res/com.example.customui_topbar"</span>
 xmlns:tools=<span class="string">"http://schemas.android.com/tools"</span>
@@ -243,7 +249,9 @@ android:layout_height=<span class="string">"match_parent"</span>
 &lt;/com.example.customui_topbar.Topbar&gt;
 
 &lt;/RelativeLayout&gt;
-</code></pre><p>MainActivity.java</p>
+</code></pre><blockquote>
+<p>MainActivity.java</p>
+</blockquote>
 <pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>{
 <span class="keyword">private</span> Topbar mTopbar;
 
