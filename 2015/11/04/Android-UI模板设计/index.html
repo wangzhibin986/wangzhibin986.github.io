@@ -5,12 +5,14 @@
   <meta charset="UTF-8">
   <meta name="baidu-site-verification" content="GliC1jSe3E" />
   
-    <title>Android ShareSDK实现App的社会化功能 | Wzb&#39;s Blog</title>
+    <title>Android UI模板设计 | Wzb&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Wang Zhibin">
     
-    <meta name="description" content="ShareSDK是什么?  ShareSDK是为iOS，Android的App提供社会化功能的的一个组件，使用较为简单，支持国内外40多家主流社交平台。可为App提供社会化分享、登录、关注、获得用户资料、获取好友列表等主流社会化功能。并由Mob提供社会化统计分析管理系统，为App运营商提供用户数据、">
+    <meta name="description" content="在android中，类似于下图所示的顶部导航无处不在，这点相信大家都会深有体会。很多人都会有这样的经历，在一个app中，基本上每个页面都要用到这样一个布局模块，重复的复制粘贴的工作变得极其讨厌，这篇博客就带大家跟随着android’s fa 的脚步来学学如何进行简单UI模板的设计吧。
+
+Androi">
     
     
     
@@ -70,14 +72,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/09/27/Android-ShareSDK实现App的社会化功能/" title="Android ShareSDK实现App的社会化功能" itemprop="url">Android ShareSDK实现App的社会化功能</a>
+      <a href="/2015/11/04/Android-UI模板设计/" title="Android UI模板设计" itemprop="url">Android UI模板设计</a>
   </h1>
   <p class="article-author">By
        
 		<a href="https://plus.google.com/118224772589648180000?rel=author" title="Wang Zhibin" target="_blank" itemprop="author">Wang Zhibin</a>
 		
   <p class="article-time">
-    <time datetime="2015-09-26T17:03:21.000Z" itemprop="datePublished"> 发表于 2015-09-27</time>
+    <time datetime="2015-11-04T15:49:15.000Z" itemprop="datePublished"> 发表于 2015-11-04</time>
     
   </p>
 </header>
@@ -87,50 +89,186 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ShareSDK是什么?"><span class="toc-number">1.</span> <span class="toc-text">ShareSDK是什么?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何将ShareSDK运用到你的App中"><span class="toc-number">2.</span> <span class="toc-text">如何将ShareSDK运用到你的App中</span></a></li></ol>
+			
 		
 		</div>
 		
-		<h2 id="ShareSDK是什么?">ShareSDK是什么?</h2><p>  ShareSDK是为iOS，Android的App提供社会化功能的的一个组件，使用较为简单，支持国内外40多家主流社交平台。可为App提供社会化分享、登录、关注、获得用户资料、获取好友列表等主流社会化功能。并由Mob提供社会化统计分析管理系统，为App运营商提供用户数据、信息流、回流率、传播效率等数据。有效指导移动App日常运营与推广，同时为App引入更多社会化流量。</p>
-<p>  附上Mob官网ShareSDK<a href="http://sharesdk.mob.com/#/sharesdk" target="_blank" rel="external">下载链接</a><br>和一些比较诱人的数据截图，个人已经膜拜得五体投地了，，</p>
-<p><img src="http://i.imgur.com/xReLqGK.png" alt=""></p>
-<p><img src="http://i.imgur.com/EKQIA0f.png" alt=""></p>
-<p><img src="http://i.imgur.com/UQDMufm.png" alt=""></p>
-<h2 id="如何将ShareSDK运用到你的App中">如何将ShareSDK运用到你的App中</h2><p>  以下我将简述一下开发流程，详细信息请参考 <a href="http://wiki.mob.com/android_%E5%BF%AB%E9%80%9F%E9%9B%86%E6%88%90%E6%8C%87%E5%8D%97/" target="_blank" rel="external">Mob官方教程</a></p>
-<ul>
-<li><p>在www.mob.com注册账号，添加应用信息、获取AppKey</p>
-</li>
-<li><p>下载ShareSDK并解压，</p>
-</li>
-<li><p>在eclipse中快速集成</p>
-<ul>
-<li>第一步：使快速工具进行集成</li>
-</ul>
-<blockquote>
-<p>   进入ShareSDK解压目录，打开“Share SDK for Android”目录，可以找到“QuickIntegrater.jar”，这个就是快速集成ShareSDK的工具。Windows下,首先确定您已经安装了JDK，并且正确配置了JAVA_HOME和PATH系统变量，此时您可以双击QuickIntegrater启动程序.        </p>
-</blockquote>
-<p><img src="http://i.imgur.com/wdjduQy.png" alt=""></p>
-<ul>
-<li><p>第二步：配置AndroidManifest.xml</p>
-<ul>
-<li><p>1、添加权限<br><img src="http://i.imgur.com/mcABFYY.png" alt=""></p>
-</li>
-<li><p>2、添加activity信息    注：intent-filer 是处理QQ和QZone回调的，其中tencent100371282里的tencent后的数字部分是QQ的id，一定要与sharesdk.xml里的QQ和QZone的Id保持一致；(2.6.2之前用此intent处理QQ的回调，包括2.6.2的版本)<br><img src="http://i.imgur.com/PIZEkJk.png" alt=""></p>
-</li>
-<li>3、如果您集成了微信，易信，QQ，支付宝还需要添加下面回调的activity处理；（注：ShareSDK2.6.2之前QQ不需要处理下面的QQ的activity，从ShareSDK2.6.3开始加的QQ客户端回调的activity处理）<br><img src="http://i.imgur.com/NUwY2ZM.png" alt=""></li>
-<li>4、替换mob后台申请的Appkey与各个平台申请的key<br><img src="http://i.imgur.com/O8YSSsi.png" alt=""></li>
-</ul>
-</li>
-<li>第三步：添加分享代码</li>
-</ul>
-<p><img src="http://i.imgur.com/f56oPnV.png" alt=""><br><img src="http://i.imgur.com/KpkAF86.png" alt=""></p>
-<p>运行效果如下：</p>
-<p><img src="http://i.imgur.com/63jQvVv.png" alt=""></p>
-<ul>
-<li>第四步：高级自定义功能(请参考教程)</li>
-</ul>
-</li>
-</ul>
+		<p>在android中，类似于下图所示的顶部导航无处不在，这点相信大家都会深有体会。很多人都会有这样的经历，在一个app中，基本上每个页面都要用到这样一个布局模块，重复的复制粘贴的工作变得极其讨厌，这篇博客就带大家跟随着android’s fa 的脚步来学学如何进行简单UI模板的设计吧。</p>
+<p><img src="http://i.imgur.com/9w63DLN.png" alt=""></p>
+<p>Android UI模板设计可以分为以下几步：</p>
+<ol>
+<li>在values文件夹下编写包含自定义UI属性的declare-styleable资源文件</li>
+<li>自定义类Topbar继承自RelativeLayout，添加对应的成员变量，添加控件，设置控件属性，编写回调接口并实现控件对应时间的接口回调</li>
+<li>在主布局文件中引入自定义的UI模板Topbar，设置xml属性，并引入命名空间</li>
+<li>在MainActivity中实现Topbar中的接口，实现回调方法</li>
+</ol>
+<p>详细代码实现如下：</p>
+<p>attrs.xml</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">resources</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">declare-styleable</span> <span class="attribute">name</span>=<span class="value">"Topbar"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"title"</span> <span class="attribute">format</span>=<span class="value">"string"</span>/&gt;</span>
+        <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"titleTextSize"</span> <span class="attribute">format</span>=<span class="value">"dimension"</span>/&gt;</span>
+        <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"titleTextColor"</span> <span class="attribute">format</span>=<span class="value">"color"</span>/&gt;</span>
+        <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"leftTextColor"</span> <span class="attribute">format</span>=<span class="value">"color"</span>/&gt;</span>
+        <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"leftBackground"</span> <span class="attribute">format</span>=<span class="value">"reference|color"</span>/&gt;</span>
+        <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"leftText"</span> <span class="attribute">format</span>=<span class="value">"string"</span>/&gt;</span>
+        <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"rightTextColor"</span> <span class="attribute">format</span>=<span class="value">"color"</span>/&gt;</span>
+        <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"rightBackground"</span> <span class="attribute">format</span>=<span class="value">"reference|color"</span>/&gt;</span>
+        <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"rightText"</span> <span class="attribute">format</span>=<span class="value">"string"</span>/&gt;</span>
+    <span class="tag">&lt;/<span class="title">declare-styleable</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">resources</span>&gt;</span>    
+</code></pre><p>Topbar.java 自定义UI类</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Topbar</span> <span class="keyword">extends</span> <span class="title">RelativeLayout</span> </span>{
+<span class="keyword">private</span> Button mLeftButton,mRightButton;
+<span class="keyword">private</span> TextView mTitle;
+
+<span class="keyword">private</span> <span class="keyword">int</span> mLeftTextColor;
+<span class="keyword">private</span> Drawable mLeftBackground;
+<span class="keyword">private</span> String mLeftText;
+
+<span class="keyword">private</span> <span class="keyword">int</span> mRightTextColor;
+<span class="keyword">private</span> Drawable mRightBackground;
+<span class="keyword">private</span> String mRightText;
+
+<span class="keyword">private</span> <span class="keyword">float</span> mTitleTextSize;
+<span class="keyword">private</span> <span class="keyword">int</span> mTitleTextColor;
+<span class="keyword">private</span> String mTitleText;
+
+<span class="keyword">private</span> LayoutParams leftParams,rightParams,titleParams;
+
+<span class="keyword">private</span> OnItemClickListener mListener;
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">OnItemClickListener</span></span>{
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnLeftButtonClicked</span><span class="params">()</span></span>;
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnRightButtonClicked</span><span class="params">()</span></span>;
+}
+
+<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setOnItemClickListener</span><span class="params">(OnItemClickListener mListener)</span> </span>{
+    <span class="keyword">this</span>.mListener = mListener;
+}
+
+<span class="annotation">@SuppressLint</span>(<span class="string">"NewApi"</span>)
+<span class="function"><span class="keyword">public</span> <span class="title">Topbar</span><span class="params">(Context context, AttributeSet attrs)</span> </span>{
+    <span class="keyword">super</span>(context, attrs);
+
+    TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.Topbar);
+    mLeftText = typedArray.getString(R.styleable.Topbar_leftText);
+    mLeftTextColor= typedArray.getColor(R.styleable.Topbar_leftTextColor, <span class="number">0</span>);
+    mLeftBackground = typedArray.getDrawable(R.styleable.Topbar_leftBackground);
+
+    mRightText = typedArray.getString(R.styleable.Topbar_rightText);
+    mRightTextColor= typedArray.getColor(R.styleable.Topbar_rightTextColor, <span class="number">0</span>);
+    mRightBackground = typedArray.getDrawable(R.styleable.Topbar_rightBackground);
+
+    mTitleTextSize = typedArray.getDimension(R.styleable.Topbar_titleTextSize, <span class="number">0</span>);
+    mTitleTextColor = typedArray.getColor(R.styleable.Topbar_titleTextColor, <span class="number">0</span>);
+    mTitleText = typedArray.getString(R.styleable.Topbar_title);
+
+    typedArray.recycle();
+
+    mLeftButton = <span class="keyword">new</span> Button(context);
+    mRightButton = <span class="keyword">new</span> Button(context);
+    mTitle = <span class="keyword">new</span> TextView(context);
+
+    mLeftButton.setTextColor(mLeftTextColor);
+    mLeftButton.setText(mLeftText);
+    mLeftButton.setBackground(mLeftBackground);
+
+    mRightButton.setTextColor(mRightTextColor);
+    mRightButton.setText(mRightText);
+    mRightButton.setBackground(mRightBackground);
+
+    mTitle.setTextColor(mTitleTextColor);
+    mTitle.setText(mTitleText);
+    mTitle.setTextSize(mTitleTextSize);
+    mTitle.setGravity(Gravity.CENTER);
+
+    setBackgroundColor(<span class="number">0xFFF59563</span>);
+
+    <span class="comment">// 设置左边button中的布局属性为左对齐，大小为最小值</span>
+    leftParams = <span class="keyword">new</span> LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+    leftParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT,TRUE);
+    addView(mLeftButton,leftParams);<span class="comment">//用配置好的布局参数把button加入到布局中</span>
+
+    <span class="comment">// 设置右边button中的布局属性为右对齐，大小为最小值</span>
+    rightParams = <span class="keyword">new</span> LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+    rightParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT,TRUE);
+    addView(mRightButton,rightParams);<span class="comment">//用配置好的布局参数把button加入到布局中</span>
+
+    <span class="comment">// 设置title中的布局属性为居中对齐对齐，大小为最小值</span>
+    titleParams = <span class="keyword">new</span> LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.MATCH_PARENT);
+    titleParams.addRule(RelativeLayout.CENTER_IN_PARENT,TRUE);
+    addView(mTitle,titleParams);<span class="comment">//用配置好的布局参数把TITLE加入到布局中</span>
+
+    mLeftButton.setOnClickListener(<span class="keyword">new</span> OnClickListener() {
+
+        <span class="annotation">@Override</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>{
+            mListener.OnLeftButtonClicked();
+        }
+    });
+
+    mRightButton.setOnClickListener(<span class="keyword">new</span> OnClickListener() {
+
+        <span class="annotation">@Override</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>{
+            mListener.OnRightButtonClicked();
+        }
+    });
+}
+}
+</code></pre><p>activity_main.xml主布局文件</p>
+<pre><code>&lt;RelativeLayout xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span>
+xmlns:<span class="keyword">custom</span>=<span class="string">"http://schemas.android.com/apk/res/com.example.customui_topbar"</span>
+xmlns:tools=<span class="string">"http://schemas.android.com/tools"</span>
+android:layout_width=<span class="string">"match_parent"</span>
+android:layout_height=<span class="string">"match_parent"</span>
+ &gt;
+
+&lt;com.example.customui_topbar.Topbar 
+    android:id=<span class="string">"@+id/topbar"</span>
+    android:layout_width=<span class="string">"match_parent"</span>
+    android:layout_height=<span class="string">"40dp"</span>
+    <span class="keyword">custom</span>:title=<span class="string">"标题"</span>
+    <span class="keyword">custom</span>:titleTextSize=<span class="string">"14sp"</span>
+    <span class="keyword">custom</span>:titleTextColor=<span class="string">"#ffff0000"</span>
+    <span class="keyword">custom</span>:leftTextColor=<span class="string">"#ffffffff"</span>
+    <span class="keyword">custom</span>:leftBackground=<span class="string">"#ff0000ff"</span>
+    <span class="keyword">custom</span>:leftText=<span class="string">"back"</span>
+    <span class="keyword">custom</span>:rightTextColor=<span class="string">"#ffff0000"</span>
+    <span class="keyword">custom</span>:rightBackground=<span class="string">"#ff0000ff"</span>
+    <span class="keyword">custom</span>:rightText=<span class="string">"next"</span>
+    &gt;
+&lt;/com.example.customui_topbar.Topbar&gt;
+
+&lt;/RelativeLayout&gt;
+</code></pre><p>MainActivity.java</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>{
+<span class="keyword">private</span> Topbar mTopbar;
+
+<span class="annotation">@Override</span>
+<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>{
+    <span class="keyword">super</span>.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+
+    mTopbar = (Topbar) findViewById(R.id.topbar);
+
+    mTopbar.setOnItemClickListener(<span class="keyword">new</span> OnItemClickListener() {
+        <span class="annotation">@Override</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnLeftButtonClicked</span><span class="params">()</span> </span>{
+            Toast.makeText(MainActivity.<span class="keyword">this</span>, <span class="string">"LeftButton Clicked"</span>, <span class="number">2000</span>).show();
+        }
+
+        <span class="annotation">@Override</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnRightButtonClicked</span><span class="params">()</span> </span>{
+            Toast.makeText(MainActivity.<span class="keyword">this</span>, <span class="string">"RightButton Clicked"</span>, <span class="number">2000</span>).show();
+        }
+    });
+}
+}
+</code></pre><p>好啦，到此一个简单的UI模板设计就完成了，现在就可以在你的页面中直接复用此UI模板，使界面风格统一更加容易控制。</p>
+<p>抛砖引玉，希望可以帮到大家！</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -138,13 +276,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Android/">Android</a>
+  <a class="article-category-link" href="/categories/android/">android</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Android第三方组件/">Android第三方组件</a>
+  <span></span> <a href="/tags/UI模板设计/">UI模板设计</a>
   </div>
 
 </div>
@@ -152,7 +290,7 @@
 
 <div class="article-share" id="share">
 
-  <div data-url="http://wangzhibin986.github.io/2015/09/27/Android-ShareSDK实现App的社会化功能/" data-title="Android ShareSDK实现App的社会化功能 | Wzb&#39;s Blog" data-tsina="null" class="share clearfix">
+  <div data-url="http://wangzhibin986.github.io/2015/11/04/Android-UI模板设计/" data-title="Android UI模板设计 | Wzb&#39;s Blog" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -161,19 +299,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/10/06/Fragment和ListFragment之间的数据通信/" title="Fragment和ListFragment之间的数据通信">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Fragment和ListFragment之间的数据通信</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2015/09/07/MyBatis中映射文件语法分析/"  title="MyBatis架构流程">
+<a href="/2015/10/06/Fragment和ListFragment之间的数据通信/"  title="Fragment和ListFragment之间的数据通信">
  <strong>下一篇：</strong><br/> 
- <span>MyBatis架构流程
+ <span>Fragment和ListFragment之间的数据通信
 </span>
 </a>
 </div>
@@ -198,7 +328,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ShareSDK是什么?"><span class="toc-number">1.</span> <span class="toc-text">ShareSDK是什么?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何将ShareSDK运用到你的App中"><span class="toc-number">2.</span> <span class="toc-text">如何将ShareSDK运用到你的App中</span></a></li></ol>
+ 
  
   </div>
 
